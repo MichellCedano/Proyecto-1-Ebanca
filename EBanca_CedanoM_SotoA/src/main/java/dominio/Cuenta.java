@@ -14,6 +14,7 @@ import java.util.Date;
 public class Cuenta {
     
     private Integer codigo;
+    private String estado;
     private Date fechaApertura;
     private float saldo;
     private Integer codigoCliente;
@@ -21,20 +22,23 @@ public class Cuenta {
     public Cuenta() {
     }
 
-    public Cuenta(Integer codigo, Date fechaApertura, float saldo, Integer codigoCliente) {
+    public Cuenta(Integer codigo, String estado, Date fechaApertura, float saldo, Integer codigoCliente) {
         this.codigo = codigo;
+        this.estado = estado;
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;
         this.codigoCliente = codigoCliente;
     }
 
-    public Cuenta(Date fechaApertura, float saldo, Integer codigoCliente) {
+    public Cuenta(String estado, Date fechaApertura, float saldo, Integer codigoCliente) {
+        this.estado = estado;
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;
         this.codigoCliente = codigoCliente;
     }
 
-    public Cuenta(Date fechaApertura, Integer codigoCliente) {
+    public Cuenta(String estado, Date fechaApertura, Integer codigoCliente) {
+        this.estado = estado;
         this.fechaApertura = fechaApertura;
         this.codigoCliente = codigoCliente;
     }
@@ -69,6 +73,14 @@ public class Cuenta {
 
     public void setCodigoCliente(Integer codigoCliente) {
         this.codigoCliente = codigoCliente;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
     
 }
