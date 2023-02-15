@@ -6,8 +6,8 @@ USE e_banca;
 	CREATE TABLE direcciones(
 	codigo int AUTO_INCREMENT PRIMARY KEY,
 	calle VARCHAR(50) NOT NULL,
-	colonia VARCHAR(50) NOT NULL,
-	numeroCasa VARCHAR(50) NOT NULL
+    numero VARCHAR(50) NOT NULL,
+	colonia VARCHAR(50) NOT NULL
 	);
 
 #CLIENTES
@@ -15,26 +15,26 @@ USE e_banca;
 	codigo INT AUTO_INCREMENT PRIMARY KEY,
 	nombre VARCHAR(30) NOT NULL,
     apellidoPaterno VARCHAR(30) NOT NULL,
-    apellidoMaterno VARCHAR(30) NOT NULL,
-    codigoDireccion INT NOT NULL,
+    apellidoMaterno VARCHAR(30),
     fechaNacimiento DATE NOT NULL,
-    edad INT,
+    edad INT DEFAULT (TIMESTAMPDIFF(YEAR, fechaNacimiento, CURDATE())),
+    nip int (4) NOT NULL,
+    codigoDireccion INT NOT NULL,
 	FOREIGN KEY (codigoDireccion) REFERENCES direcciones(codigo)
 	);
-
 
 #CUENTAS
 	CREATE TABLE cuentas (
 	codigo INT AUTO_INCREMENT PRIMARY KEY,
 	estado ENUM('activo','cancelada') NOT NULL,
     fechaApertura DATE NOT NULL DEFAULT(current_date()),
-    saldo INT NOT NULL,
+    saldo INT DEFAULT 0,
 	codigoCliente INT NOT NULL,
     FOREIGN KEY (codigoCliente) REFERENCES clientes(codigo)
 	);
 
 #TRANSFERENCIAS
-	CREATE TABLE tranferencias (
+	CREATE TABLE transferencias (
 	codigo INT  AUTO_INCREMENT PRIMARY KEY,
     fechaTransferencia DATE NOT NULL DEFAULT(current_date()),
     tipo ENUM('retiro sin cuenta','transferencia') NOT NULL,
