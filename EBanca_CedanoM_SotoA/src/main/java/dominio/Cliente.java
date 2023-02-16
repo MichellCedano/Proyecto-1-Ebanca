@@ -37,13 +37,12 @@ public class Cliente {
         this.nip = nip;
     }
 
-    public Cliente(String nombres, String apPaterno, String apMaterno, Integer codigoDireccion, Date fechaNacimiento, int edad, int nip) {
+    public Cliente(String nombres, String apPaterno, String apMaterno, Integer codigoDireccion, Date fechaNacimiento, int nip) {
         this.nombres = nombres;
         this.apPaterno = apPaterno;
         this.apMaterno = apMaterno;
         this.codigoDireccion = codigoDireccion;
         this.fechaNacimiento = fechaNacimiento;
-        this.edad = edad;
         this.nip = nip;
     }
 
@@ -94,15 +93,7 @@ public class Cliente {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
-
+    
     public int getNip() {
         return nip;
     }

@@ -5,7 +5,16 @@
  */
 package GUI;
 
+import dominio.Cliente;
+import dominio.Direccion;
+import excepciones.PersistenciaException;
+import interfaces.IClientesDAO;
 import java.awt.event.KeyEvent;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static javafx.application.Platform.exit;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import validador.Validadores;
 
@@ -15,13 +24,83 @@ import validador.Validadores;
  */
 public class DlgRegistro extends javax.swing.JDialog {
     Validadores val = new Validadores();
+    private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
+    
+    private final IClientesDAO clientesDAO;
     /**
      * Creates new form DlgRegistro
+     * @param parent
      */
-    public DlgRegistro(java.awt.Frame parent, boolean modal) {
+    public DlgRegistro(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO) {
         super(parent, modal);
+        this.clientesDAO = clientesDAO;
         initComponents();
     }
+    
+    private Cliente validadorCliente(){
+        Cliente cliente = null;
+        if(!val.validaCadena(30,this.txtNombre.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El nombre no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(!val.validaCadena(30,this.txtApellidoP.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido paterno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(!val.validaCadena(30,this.txtApellidoM.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido materno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);    
+        }else if(!val.validaEntero(this.txtPin.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El pin no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String nombres = this.txtNombre.getText();
+            Integer codigoDireccion = 2; 
+            Integer nip = Integer.parseInt(this.txtPin.getText());
+            String apPaterno = this.txtApellidoP.getText();
+            String apMaterno = this.txtApellidoM.getText();
+            int dia = Integer.parseInt(this.cmbDia.getSelectedItem().toString());
+            int mes = Integer.parseInt(this.cmbMes.getSelectedItem().toString());
+            int anio = Integer.parseInt(this.cmbAnio.getSelectedItem().toString());
+            Date fechaNacimiento = new Date(anio,mes,dia);
+            
+            cliente = new Cliente( nombres, apPaterno,  apMaterno,  codigoDireccion,  fechaNacimiento, nip);
+            
+            return cliente;
+        }
+        return cliente;
+    }
+    
+    private Direccion validadorDireccion(){
+        Direccion direccion = null;
+        if(val.cadenaVacia(this.txtCalle.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La calle no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(val.cadenaVacia(this.txtColonia.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La colonia no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(val.cadenaVacia(this.txtNumCasa.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El numero de casa no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String numCasa = this.txtNumCasa.getText();
+            String calle = this.txtCalle.getText();
+            String colonia = this.txtColonia.getText();
+            direccion = new Direccion(calle,colonia,numCasa);
+            
+            return direccion;
+        }
+        return direccion;
+    }
+    
+    private void guardar(){
+  
+        Direccion direccion = validadorDireccion();
+        
+        Cliente cliente = validadorCliente();
+               
+        //Enviar a dao para guardar
+        
+        try{
+            this.clientesDAO.insertar(cliente, direccion);
+            JOptionPane.showMessageDialog(this,"Se agrego al cliente: "+cliente.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        }catch(PersistenciaException ex){
+            LOG.log(Level.SEVERE,ex.getMessage());
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: ","ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    } 
     
     
     /**
@@ -189,6 +268,11 @@ public class DlgRegistro extends javax.swing.JDialog {
         jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
 
         txtCalle.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        txtCalle.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCalleKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 230, 40));
 
         txtColonia.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
@@ -214,12 +298,22 @@ public class DlgRegistro extends javax.swing.JDialog {
         jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 650, 160, 50));
 
         jButton2.setBackground(new java.awt.Color(72, 77, 197));
         jButton2.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 650, 170, 50));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 580, 720));
@@ -306,47 +400,20 @@ public class DlgRegistro extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtApellidoMKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        guardar();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgRegistro dialog = new DlgRegistro(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        exit();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtCalleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCalleKeyTyped
+        if(this.txtCalle.getText().length() >= 50)
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCalleKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbAnio;
