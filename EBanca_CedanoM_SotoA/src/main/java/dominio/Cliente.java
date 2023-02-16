@@ -46,6 +46,12 @@ public class Cliente {
         this.nip = nip;
     }
 
+    public Cliente(Integer codigo) {
+        this.codigo = codigo;
+    }
+    
+    
+    
     public Integer getCodigo() {
         return codigo;
     }

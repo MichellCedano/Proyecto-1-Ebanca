@@ -136,8 +136,8 @@ public class DlgRegistro extends javax.swing.JDialog {
         txtColonia = new javax.swing.JTextField();
         txtNumCasa = new javax.swing.JTextField();
         txtPin = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(640, 772));
@@ -276,6 +276,11 @@ public class DlgRegistro extends javax.swing.JDialog {
         jPanel2.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 230, 40));
 
         txtColonia.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        txtColonia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtColoniaKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 430, 230, 40));
 
         txtNumCasa.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
@@ -294,27 +299,27 @@ public class DlgRegistro extends javax.swing.JDialog {
         });
         jPanel2.add(txtPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 580, 170, 40));
 
-        jButton1.setBackground(new java.awt.Color(72, 77, 197));
-        jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(72, 77, 197));
+        btnGuardar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 650, 160, 50));
+        jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 650, 160, 50));
 
-        jButton2.setBackground(new java.awt.Color(72, 77, 197));
-        jButton2.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Cancelar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
+        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 650, 170, 50));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 650, 170, 50));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 580, 720));
 
@@ -354,12 +359,8 @@ public class DlgRegistro extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtNumCasaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumCasaKeyTyped
-        int key = evt.getKeyChar();
-        boolean numeros = key >= 48 && key <= 57;
-        if (!numeros) {
-            evt.consume();
-        }
-        if (txtPin.getText().trim().length() == 4) {
+        if(this.txtNumCasa.getText().length() >= 10)
+        {
             evt.consume();
         }
     }//GEN-LAST:event_txtNumCasaKeyTyped
@@ -400,13 +401,14 @@ public class DlgRegistro extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtApellidoMKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         guardar();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        exit();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtCalleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCalleKeyTyped
         if(this.txtCalle.getText().length() >= 50)
@@ -415,12 +417,19 @@ public class DlgRegistro extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtCalleKeyTyped
 
+    private void txtColoniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColoniaKeyTyped
+        if(this.txtColonia.getText().length() >= 50)
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtColoniaKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> cmbAnio;
     private javax.swing.JComboBox<String> cmbDia;
     private javax.swing.JComboBox<String> cmbMes;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

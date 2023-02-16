@@ -21,7 +21,5 @@ public interface IClientesDAO {
     
     Cliente insertar(Cliente cliente, Direccion direccion) throws PersistenciaException; 
     
-    Cliente eliminar(Integer codigoCliente);
-    
     List <Cliente> consultarLista(ConfiguracionPaginado paginado) throws PersistenciaException;
 }

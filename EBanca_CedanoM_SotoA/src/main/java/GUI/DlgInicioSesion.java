@@ -5,17 +5,30 @@
  */
 package GUI;
 
+import dominio.Cliente;
+import interfaces.IClientesDAO;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import validador.Validadores;
+
 /**
  *
  * @author koine
  */
 public class DlgInicioSesion extends javax.swing.JDialog {
-
+    Cliente cliente = null;
+    Validadores val = new Validadores();
+    private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
+    
+    private final IClientesDAO clientesDAO;
+    
+    
     /**
      * Creates new form VentanaInicioSesion
      */
-    public DlgInicioSesion(java.awt.Frame parent, boolean modal) {
+    public DlgInicioSesion(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO) {
         super(parent, modal);
+        this.clientesDAO= clientesDAO;
         initComponents();
     }
 
@@ -57,23 +70,33 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("Aceptar");
-        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 170, 70));
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, 170, 70));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
         btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 410, 180, 70));
 
         lblId.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblId.setForeground(new java.awt.Color(14, 47, 132));
         lblId.setText("ID:");
-        jPanel2.add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
+        jPanel2.add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, -1, -1));
 
         lblPin.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblPin.setForeground(new java.awt.Color(14, 47, 132));
         lblPin.setText("Pin:");
-        jPanel2.add(lblPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, -1, -1));
+        jPanel2.add(lblPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
 
         txtIdCliente.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         txtIdCliente.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -128,48 +151,23 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtPinKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgInicioSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgInicioSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgInicioSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgInicioSesion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        Cliente clienteConsulta = clientesDAO.consultar(Integer.parseInt(this.txtIdCliente.getText()));
+        if(!(Integer.parseInt(this.txtIdCliente.getText()) == clienteConsulta.getCodigo())){
+            JOptionPane.showMessageDialog(this,"No fue posible Iniciar sesion: id no encontrado","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(!(Integer.parseInt(this.txtPin.getText()) == clienteConsulta.getNip())){
+            JOptionPane.showMessageDialog(this,"No fue posible Iniciar sesion: pin incorrecto","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else{
+            new FrmInicio(clientesDAO, clienteConsulta).setVisible(true);
+            dispose();
         }
-        //</editor-fold>
-        //</editor-fold>
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgInicioSesion dialog = new DlgInicioSesion(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

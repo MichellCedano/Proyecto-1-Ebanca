@@ -18,6 +18,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private final IClientesDAO clientesDAO;
     /**
      * Creates new form FrmPrincipal
+     * @param clientesDAO
      */
     public FrmPrincipal(IClientesDAO clientesDAO) {
         this.clientesDAO = clientesDAO;
@@ -48,21 +49,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(149, 194, 255));
 
+        lblLogo.setIcon(new javax.swing.ImageIcon("C:\\Users\\koine\\Documents\\GitHub\\Proyecto-1-Ebanca\\EBanca_CedanoM_SotoA\\src\\main\\java\\img\\Logo_Ebanca.png")); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
                 .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 35, -1, 250));
@@ -71,6 +74,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnInicio.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
         btnInicio.setForeground(new java.awt.Color(255, 255, 255));
         btnInicio.setText("Inicio sesion");
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 127, 50));
 
         btnRetiro.setBackground(new java.awt.Color(72, 77, 197));
@@ -113,6 +121,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         
     new DlgRegistro(this, true, clientesDAO).setVisible(true);
     }//GEN-LAST:event_btnRegistroActionPerformed
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+    new DlgInicioSesion(this, true, clientesDAO).setVisible(true);
+    }//GEN-LAST:event_btnInicioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;

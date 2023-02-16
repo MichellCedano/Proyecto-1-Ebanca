@@ -38,7 +38,7 @@ public class ClientesDAO implements IClientesDAO {
     @Override
     public Cliente consultar(Integer codigoCliente) {
         String sql = "select codigo, nombre, apellidoPaterno, apellidoMaterno, "
-                + "fechaNacimiento, nip, codigoDireccion"
+                + "fechaNacimiento, edad, nip, codigoDireccion "
                 + "from clientes where codigo = ?";
         try (
                 Connection conexion = this.generadorConexiones.crearConexion();
@@ -118,22 +118,7 @@ public class ClientesDAO implements IClientesDAO {
         
     }
 
-    @Override
-    public Cliente eliminar(Integer codigoCliente) {
-        String sql = "delete from clientes where codigo = ?";
-        try (
-                Connection conexion = this.generadorConexiones.crearConexion();
-                PreparedStatement comando = conexion.prepareStatement(sql);) {
-            Cliente cliente = consultar(codigoCliente);
-            comando.setInt(1, codigoCliente);
-            int numClientesEliminados = comando.executeUpdate();
-            return numClientesEliminados > 0 ? cliente : null;
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage());
-            return null;
-        }
-    }
-
+   
     @Override
     public List<Cliente> consultarLista(ConfiguracionPaginado paginado) throws PersistenciaException {
         String sql = "select codigo, nombre, apellidoPaterno, apellidoMaterno, codigoDireccion "
