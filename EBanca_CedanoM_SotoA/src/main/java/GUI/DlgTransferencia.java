@@ -28,18 +28,81 @@ public class DlgTransferencia extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        lblOrigen = new javax.swing.JLabel();
+        txtCuentaDestino1 = new javax.swing.JTextField();
+        lblCuenta = new javax.swing.JLabel();
+        lblMonto = new javax.swing.JLabel();
+        txtMonto = new javax.swing.JTextField();
+        lblCliente = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        lblCuenta3 = new javax.swing.JLabel();
+        cbxCuentas1 = new javax.swing.JComboBox<>();
+        btnAceptar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        lblDestino = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Transferencias");
+        setBackground(new java.awt.Color(204, 204, 204));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(149, 194, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblOrigen.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblOrigen.setForeground(new java.awt.Color(14, 47, 132));
+        lblOrigen.setText("Origen");
+        jPanel2.add(lblOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, -1, -1));
+        jPanel2.add(txtCuentaDestino1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 262, 49));
+
+        lblCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
+        lblCuenta.setText("Cuenta:");
+        jPanel2.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, -1));
+
+        lblMonto.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblMonto.setForeground(new java.awt.Color(14, 47, 132));
+        lblMonto.setText("Monto:");
+        jPanel2.add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, -1, -1));
+        jPanel2.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 390, 133, 49));
+
+        lblCliente.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblCliente.setForeground(new java.awt.Color(14, 47, 132));
+        lblCliente.setText("Cliente:");
+        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 262, 49));
+
+        lblCuenta3.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblCuenta3.setForeground(new java.awt.Color(14, 47, 132));
+        lblCuenta3.setText("Cuenta:");
+        jPanel2.add(lblCuenta3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, -1));
+
+        cbxCuentas1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(cbxCuentas1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, 256, 41));
+
+        btnAceptar.setBackground(new java.awt.Color(72, 77, 197));
+        btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
+        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAceptar.setText("Aceptar");
+        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 470, 170, 70));
+
+        jPanel4.setBackground(new java.awt.Color(56, 115, 205));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 510, 10));
+
+        lblDestino.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblDestino.setForeground(new java.awt.Color(14, 47, 132));
+        lblDestino.setText("Destino");
+        jPanel2.add(lblDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 32, 510, 580));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 650));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -87,5 +150,19 @@ public class DlgTransferencia extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAceptar;
+    private javax.swing.JComboBox<String> cbxCuentas1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblCuenta;
+    private javax.swing.JLabel lblCuenta3;
+    private javax.swing.JLabel lblDestino;
+    private javax.swing.JLabel lblMonto;
+    private javax.swing.JLabel lblOrigen;
+    private javax.swing.JTextField txtCuentaDestino1;
+    private javax.swing.JTextField txtMonto;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
