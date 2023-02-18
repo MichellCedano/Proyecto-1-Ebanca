@@ -5,17 +5,28 @@
  */
 package GUI;
 
+import dominio.Cliente;
+import interfaces.IClientesDAO;
+import java.util.logging.Logger;
+import validador.Validadores;
+
 /**
  *
  * @author koine
  */
 public class DlgActualizarDatos extends javax.swing.JDialog {
-
+    private Cliente cliente = null;
+    private Validadores val = new Validadores();
+    private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
+    
+    private final IClientesDAO clientesDAO;
     /**
      * Creates new form DlgActualizarDatos
      */
-    public DlgActualizarDatos(java.awt.Frame parent, boolean modal) {
+    public DlgActualizarDatos(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente) {
         super(parent, modal);
+        this.clientesDAO= clientesDAO;
+        this.cliente = cliente;
         initComponents();
     }
 
@@ -50,6 +61,7 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Actualizar datos");
+        setAlwaysOnTop(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -184,6 +196,7 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 660));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
@@ -261,7 +274,7 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
 

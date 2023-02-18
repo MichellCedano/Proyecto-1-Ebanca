@@ -8,6 +8,7 @@ package GUI;
 import dominio.Cliente;
 import interfaces.IClientesDAO;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import validador.Validadores;
 
 /**
@@ -15,8 +16,8 @@ import validador.Validadores;
  * @author koine
  */
 public class FrmInicio extends javax.swing.JFrame {
-    Cliente cliente = null;
-    Validadores val = new Validadores();
+    private Cliente cliente = null;
+    private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
@@ -82,6 +83,11 @@ public class FrmInicio extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Consulta cuenta");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 193, 75));
 
         jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\koine\\Documents\\GitHub\\Proyecto-1-Ebanca\\EBanca_CedanoM_SotoA\\src\\main\\java\\img\\Logo_Ebanca.png")); // NOI18N
@@ -117,6 +123,11 @@ public class FrmInicio extends javax.swing.JFrame {
                 menuITransaccionMouseClicked(evt);
             }
         });
+        menuITransaccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuITransaccionActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(menuITransaccion);
 
         jMenu2.setText("Cuenta");
@@ -124,14 +135,34 @@ public class FrmInicio extends javax.swing.JFrame {
         menuCuenta.setText("Cuenta");
 
         menuICrearCuenta.setText("Crear cuenta");
+        menuICrearCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuICrearCuentaActionPerformed(evt);
+            }
+        });
         menuCuenta.add(menuICrearCuenta);
 
         menuICancelarCuenta.setText("Cancelar cuenta");
+        menuICancelarCuenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuICancelarCuentaMouseClicked(evt);
+            }
+        });
+        menuICancelarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuICancelarCuentaActionPerformed(evt);
+            }
+        });
         menuCuenta.add(menuICancelarCuenta);
 
         jMenu2.add(menuCuenta);
 
         menuIActualizarDatos.setText("Actualizar datos");
+        menuIActualizarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuIActualizarDatosActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuIActualizarDatos);
 
         jMenuBar1.add(jMenu2);
@@ -140,6 +171,11 @@ public class FrmInicio extends javax.swing.JFrame {
         menuIAcercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 menuIAcercaDeMouseClicked(evt);
+            }
+        });
+        menuIAcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuIAcercaDeActionPerformed(evt);
             }
         });
         jMenuBar1.add(menuIAcercaDe);
@@ -161,6 +197,34 @@ public class FrmInicio extends javax.swing.JFrame {
     private void lblNombreMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNombreMouseEntered
         this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
     }//GEN-LAST:event_lblNombreMouseEntered
+
+    private void menuICancelarCuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuICancelarCuentaMouseClicked
+        new DlgCancelarCuenta(this, true, clientesDAO, cliente).setVisible(true);
+    }//GEN-LAST:event_menuICancelarCuentaMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new DlgConsultar(this, true, clientesDAO, cliente).setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void menuICancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuICancelarCuentaActionPerformed
+        new DlgCancelarCuenta(this, true, clientesDAO, cliente).setVisible(true);
+    }//GEN-LAST:event_menuICancelarCuentaActionPerformed
+
+    private void menuITransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuITransaccionActionPerformed
+        new DlgTransferencia(this, true, clientesDAO, cliente).setVisible(true);
+    }//GEN-LAST:event_menuITransaccionActionPerformed
+
+    private void menuIAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIAcercaDeActionPerformed
+        JOptionPane.showMessageDialog(this,"Michell Cedano, Alexa Soto","DESARROLLADORES", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_menuIAcercaDeActionPerformed
+
+    private void menuICrearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuICrearCuentaActionPerformed
+        new DlgCrearCuenta(this, true, clientesDAO, cliente).setVisible(true);
+    }//GEN-LAST:event_menuICrearCuentaActionPerformed
+
+    private void menuIActualizarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIActualizarDatosActionPerformed
+        new DlgActualizarDatos(this, true, clientesDAO, cliente).setVisible(true);
+    }//GEN-LAST:event_menuIActualizarDatosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

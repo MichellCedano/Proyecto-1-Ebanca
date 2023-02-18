@@ -85,6 +85,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnRetiro.setFont(new java.awt.Font("Microsoft YaHei", 0, 14)); // NOI18N
         btnRetiro.setForeground(new java.awt.Color(255, 255, 255));
         btnRetiro.setText("Retiro");
+        btnRetiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetiroActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnRetiro, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 300, 128, 50));
 
         btnRegistro.setBackground(new java.awt.Color(72, 77, 197));
@@ -118,13 +123,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
-        
-    new DlgRegistro(this, true, clientesDAO).setVisible(true);
+     new DlgRegistro(this, true, clientesDAO).setVisible(true);
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-    new DlgInicioSesion(this, true, clientesDAO).setVisible(true);
+     new DlgInicioSesion(this, true, clientesDAO).setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
+     new DlgRetiro(this, true, clientesDAO).setVisible(true);
+    }//GEN-LAST:event_btnRetiroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;

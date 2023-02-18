@@ -16,13 +16,12 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgInicioSesion extends javax.swing.JDialog {
-    Cliente cliente = null;
-    Validadores val = new Validadores();
+    private Cliente cliente = null;
+    private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
-    
-    
+
     /**
      * Creates new form VentanaInicioSesion
      */

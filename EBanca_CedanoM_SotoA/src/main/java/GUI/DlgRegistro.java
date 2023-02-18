@@ -23,7 +23,7 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgRegistro extends javax.swing.JDialog {
-    Validadores val = new Validadores();
+    private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
