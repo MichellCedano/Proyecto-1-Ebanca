@@ -114,5 +114,21 @@ public class CuentasDAO implements ICuentasDAO{
             throw new PersistenciaException("No se pudo consultar la lista de cuentas");
         }
     }
+
+    @Override
+    public Cuenta actualizarEstado(Cuenta cuenta) throws PersistenciaException {
+        String sql = "update cuentas set estado='cancelada' where codigo=? ";
+        try (
+                Connection conexion = this.generadorConexiones.crearConexion();
+                PreparedStatement comando = conexion.prepareStatement(sql);) {
+            //Cuenta cuenta = consultar(codigoCuenta);
+            comando.setInt(1, cuenta.getCodigo());
+            int numCuentasActualizadas = comando.executeUpdate();
+            return numCuentasActualizadas > 0 ? cuenta : null;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            return null;
+        }
+    }
     
 }

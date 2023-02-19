@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,6 +24,7 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
     private Cliente cliente = null;
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
+    private Cuenta cuenta = null;
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     private int tamañoLista;
     private List<Cuenta> listaCuentas;
@@ -54,6 +56,18 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
         
     }
 
+    private void actualizarEstado() {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setCodigo(Integer.parseInt(cbxCuentas.getSelectedItem().toString()));
+        try {
+            cuentasDAO.actualizarEstado(cuenta);
+            JOptionPane.showMessageDialog(this,"Se canceló la cuenta: "+ cuenta.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE,ex.getMessage());
+            JOptionPane.showMessageDialog(this,"No fue posible cancelar la cuenta ","ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -141,7 +155,7 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        
+        actualizarEstado();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

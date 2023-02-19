@@ -50,7 +50,10 @@ public class Cuenta {
         this.codigoCliente = codigoCliente;
     }
 
-    
+    public Cuenta(Integer codigoCliente) {
+        this.codigoCliente = codigoCliente;
+    }
+
     public Integer getCodigo() {
         return codigo;
     }

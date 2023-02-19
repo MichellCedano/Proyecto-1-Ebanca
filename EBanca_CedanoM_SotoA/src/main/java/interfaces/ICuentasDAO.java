@@ -19,6 +19,8 @@ public interface ICuentasDAO {
     
     Cuenta insertar(Cuenta cuenta) throws PersistenciaException;
     
+    Cuenta actualizarEstado(Cuenta cuenta) throws PersistenciaException;
+    
     Cuenta consultar(Integer codigoCuenta);
     
     List<Cuenta> consultarLista(int codigoCliente) throws PersistenciaException;
