@@ -94,7 +94,7 @@
             <Component class="javax.swing.JTextField" name="txtSaldo">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="190" y="150" width="90" height="30"/>
+                  <AbsoluteConstraints x="190" y="140" width="140" height="50"/>
                 </Constraint>
               </Constraints>
             </Component>

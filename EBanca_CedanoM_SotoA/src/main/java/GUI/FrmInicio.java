@@ -30,11 +30,11 @@ public class FrmInicio extends javax.swing.JFrame {
      * @param clientesDAO
      * @param cliente
      */
-    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente) {
+    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO) {
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
+        this.cuentasDAO = cuentasDAO;
         initComponents();
-        this.cuentasDAO = null;
     }
 
     /**
@@ -50,7 +50,7 @@ public class FrmInicio extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         lblNombre = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuITransaccion = new javax.swing.JMenu();
@@ -84,16 +84,16 @@ public class FrmInicio extends javax.swing.JFrame {
         });
         jPanel3.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 270, 50));
 
-        jButton1.setBackground(new java.awt.Color(72, 77, 197));
-        jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Consulta cuenta");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
+        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Consulta cuenta");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 260, 75));
+        jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 260, 75));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -202,15 +202,15 @@ public class FrmInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_lblNombreMouseEntered
 
     private void menuICancelarCuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuICancelarCuentaMouseClicked
-        new DlgCancelarCuenta(this, true, clientesDAO, cliente).setVisible(true);
+
     }//GEN-LAST:event_menuICancelarCuentaMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         new DlgConsultar(this, true, clientesDAO, cliente).setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void menuICancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuICancelarCuentaActionPerformed
-        new DlgCancelarCuenta(this, true, clientesDAO, cliente).setVisible(true);
+        new DlgCancelarCuenta(this, true, clientesDAO, cuentasDAO,cliente).setVisible(true);
     }//GEN-LAST:event_menuICancelarCuentaActionPerformed
 
     private void menuITransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuITransaccionActionPerformed
@@ -231,7 +231,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

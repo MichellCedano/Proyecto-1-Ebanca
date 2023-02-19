@@ -15,7 +15,7 @@ import excepciones.PersistenciaException;
  */
 public interface ICuentasDAO {
     
-    Cuenta insertar(Integer codigoCliente) throws PersistenciaException;
+    Cuenta insertar(Cuenta cuenta) throws PersistenciaException;
     
     Cuenta consultar(Integer codigoCuenta);
 }

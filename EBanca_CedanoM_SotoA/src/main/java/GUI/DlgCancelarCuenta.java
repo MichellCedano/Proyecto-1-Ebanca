@@ -7,6 +7,7 @@ package GUI;
 
 import dominio.Cliente;
 import interfaces.IClientesDAO;
+import interfaces.ICuentasDAO;
 import java.util.logging.Logger;
 
 /**
@@ -16,12 +17,14 @@ import java.util.logging.Logger;
 public class DlgCancelarCuenta extends javax.swing.JDialog {
     private Cliente cliente = null;
     private final IClientesDAO clientesDAO;
+    private final ICuentasDAO cuentasDAO;
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     /**
      * Creates new form DlgCancelarCuenta
      */
-    public DlgCancelarCuenta(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente) {
+    public DlgCancelarCuenta(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente) {
         super(parent, modal);
+        this.cuentasDAO = cuentasDAO;
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
         initComponents();

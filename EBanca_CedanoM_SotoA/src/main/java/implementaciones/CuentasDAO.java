@@ -33,19 +33,17 @@ public class CuentasDAO implements ICuentasDAO{
     }
     
     @Override
-    public Cuenta insertar(Integer codigoCliente) throws PersistenciaException {
-        Cuenta cuenta = new Cuenta();
+    public Cuenta insertar(Cuenta cuenta) throws PersistenciaException {
         String sql = "insert into cuentas("
-                + "estado, fechaApertura, saldo, codigoCliente)"
-                + "values (?,?,?,?)";
+                + "estado, saldo, codigoCliente)"
+                + "values (?,?,?)";
         try (
                 Connection conexion = this.generadorConexiones.crearConexion();
                 PreparedStatement comando = conexion.prepareStatement(
                         sql, Statement.RETURN_GENERATED_KEYS);) {
             comando.setString(1, "Activo");
-            comando.setDate(2, (java.sql.Date) cuenta.getFechaApertura());
-            comando.setFloat(3, cuenta.getSaldo());
-            comando.setInt(4, cuenta.getCodigoCliente());
+            comando.setFloat(2, cuenta.getSaldo());
+            comando.setInt(3, cuenta.getCodigoCliente());
             comando.executeUpdate();
             // ResultSet: objeto que devuelve la base al consultar
             ResultSet llavesGeneradas = comando.getGeneratedKeys();

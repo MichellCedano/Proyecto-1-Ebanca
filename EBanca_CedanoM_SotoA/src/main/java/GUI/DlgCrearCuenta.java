@@ -25,6 +25,7 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
+    
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     /**
@@ -37,10 +38,14 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         this.cliente = cliente;
         initComponents();
     }
+    
 
-    public void guardar() {
+    private void guardar() {
+        Cuenta cuenta = new Cuenta();
         try{
-            this.cuentasDAO.insertar(cliente.getCodigo());
+            cuenta.setCodigoCliente(cliente.getCodigo());
+            cuenta.setSaldo(Float.parseFloat(this.txtSaldo.getText()));
+            cuentasDAO.insertar(cuenta);
             JOptionPane.showMessageDialog(this,"Se agrego la cuenta: "+ cuenta.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
         }catch(PersistenciaException ex){
             LOG.log(Level.SEVERE,ex.getMessage());
@@ -87,7 +92,7 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         lblCuenta1.setForeground(new java.awt.Color(14, 47, 132));
         lblCuenta1.setText("Crear cuenta");
         jPanel2.add(lblCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, -1, -1));
-        jPanel2.add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 90, 30));
+        jPanel2.add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 140, 50));
 
         lblCliente1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblCliente1.setForeground(new java.awt.Color(14, 47, 132));
