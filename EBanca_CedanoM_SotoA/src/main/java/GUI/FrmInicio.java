@@ -7,9 +7,12 @@ package GUI;
 
 import dominio.Cliente;
 import dominio.Cuenta;
+import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import validador.Validadores;
 
@@ -29,12 +32,16 @@ public class FrmInicio extends javax.swing.JFrame {
      * Creates new form FrmInicio
      * @param clientesDAO
      * @param cliente
+     * @param cuentasDAO
      */
     public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO) {
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
         this.cuentasDAO = cuentasDAO;
         initComponents();
+        
+        this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
     }
 
     /**
@@ -50,16 +57,19 @@ public class FrmInicio extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         lblNombre = new javax.swing.JLabel();
-        btnCancelar = new javax.swing.JButton();
+        btnConsultar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuITransaccion = new javax.swing.JMenu();
+        menuItemTransferencia = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuCuenta = new javax.swing.JMenu();
         menuICrearCuenta = new javax.swing.JMenuItem();
         menuICancelarCuenta = new javax.swing.JMenuItem();
         menuIActualizarDatos = new javax.swing.JMenuItem();
         menuIAcercaDe = new javax.swing.JMenu();
+        menuItemDatos = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -82,28 +92,43 @@ public class FrmInicio extends javax.swing.JFrame {
                 lblNombreMouseEntered(evt);
             }
         });
-        jPanel3.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 270, 50));
+        jPanel3.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 280, 50));
 
-        btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
-        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
-        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancelar.setText("Consulta cuenta");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnConsultar.setBackground(new java.awt.Color(72, 77, 197));
+        btnConsultar.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        btnConsultar.setForeground(new java.awt.Color(255, 255, 255));
+        btnConsultar.setText("Consulta cuenta");
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnConsultarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 260, 75));
+        jPanel3.add(btnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 260, 75));
+
+        jButton1.setBackground(new java.awt.Color(72, 77, 197));
+        jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Cerrar sesion");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -111,9 +136,11 @@ public class FrmInicio extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 510, 440));
@@ -131,6 +158,15 @@ public class FrmInicio extends javax.swing.JFrame {
                 menuITransaccionActionPerformed(evt);
             }
         });
+
+        menuItemTransferencia.setText("Transferencia");
+        menuItemTransferencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemTransferenciaActionPerformed(evt);
+            }
+        });
+        menuITransaccion.add(menuItemTransferencia);
+
         jMenuBar1.add(menuITransaccion);
 
         jMenu2.setText("Cuenta");
@@ -181,6 +217,15 @@ public class FrmInicio extends javax.swing.JFrame {
                 menuIAcercaDeActionPerformed(evt);
             }
         });
+
+        menuItemDatos.setText("Desarrolladores");
+        menuItemDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemDatosActionPerformed(evt);
+            }
+        });
+        menuIAcercaDe.add(menuItemDatos);
+
         jMenuBar1.add(menuIAcercaDe);
 
         setJMenuBar(jMenuBar1);
@@ -198,27 +243,35 @@ public class FrmInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_menuITransaccionMouseClicked
 
     private void lblNombreMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNombreMouseEntered
-        this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
     }//GEN-LAST:event_lblNombreMouseEntered
 
     private void menuICancelarCuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuICancelarCuentaMouseClicked
 
     }//GEN-LAST:event_menuICancelarCuentaMouseClicked
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        new DlgConsultar(this, true, clientesDAO, cliente).setVisible(true);
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+        try {
+            new DlgConsultar(this, true, clientesDAO, cliente, cuentasDAO).setVisible(true);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FrmInicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void menuICancelarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuICancelarCuentaActionPerformed
-        new DlgCancelarCuenta(this, true, clientesDAO, cuentasDAO,cliente).setVisible(true);
+        try {
+            new DlgCancelarCuenta(this, true, clientesDAO, cuentasDAO,cliente).setVisible(true);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FrmInicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_menuICancelarCuentaActionPerformed
 
     private void menuITransaccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuITransaccionActionPerformed
-        new DlgTransferencia(this, true, clientesDAO, cliente).setVisible(true);
+        
     }//GEN-LAST:event_menuITransaccionActionPerformed
 
     private void menuIAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIAcercaDeActionPerformed
-        JOptionPane.showMessageDialog(this,"Michell Cedano, Alexa Soto","DESARROLLADORES", JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_menuIAcercaDeActionPerformed
 
     private void menuICrearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuICrearCuentaActionPerformed
@@ -229,9 +282,26 @@ public class FrmInicio extends javax.swing.JFrame {
         new DlgActualizarDatos(this, true, clientesDAO, cliente).setVisible(true);
     }//GEN-LAST:event_menuIActualizarDatosActionPerformed
 
+    private void menuItemTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemTransferenciaActionPerformed
+        try {
+            new DlgTransferencia(this, true, clientesDAO, cuentasDAO, cliente).setVisible(true);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FrmInicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_menuItemTransferenciaActionPerformed
+
+    private void menuItemDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDatosActionPerformed
+         JOptionPane.showMessageDialog(this,"Michell Cedano, Alexa Soto","DESARROLLADORES", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_menuItemDatosActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -245,5 +315,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuICancelarCuenta;
     private javax.swing.JMenuItem menuICrearCuenta;
     private javax.swing.JMenu menuITransaccion;
+    private javax.swing.JMenuItem menuItemDatos;
+    private javax.swing.JMenuItem menuItemTransferencia;
     // End of variables declaration//GEN-END:variables
 }

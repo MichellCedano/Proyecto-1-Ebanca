@@ -66,19 +66,23 @@ public class DlgRetiro extends javax.swing.JDialog {
         lblConsultar.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblConsultar.setForeground(new java.awt.Color(14, 47, 132));
         lblConsultar.setText("Retiro");
-        jPanel2.add(lblConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, -1, -1));
+        jPanel2.add(lblConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
 
         lblCliente1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblCliente1.setForeground(new java.awt.Color(14, 47, 132));
         lblCliente1.setText("Folio:");
-        jPanel2.add(lblCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+        jPanel2.add(lblCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
         lblSaldo.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblSaldo.setForeground(new java.awt.Color(14, 47, 132));
         lblSaldo.setText("Contraseña:");
-        jPanel2.add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
-        jPanel2.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 140, -1));
-        jPanel2.add(txtFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, 140, -1));
+        jPanel2.add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
+
+        txtContrasena.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 160, 40));
+
+        txtFolio.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(txtFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, 170, 40));
 
         btnAceptar.setBackground(new java.awt.Color(72, 77, 197));
         btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -89,7 +93,7 @@ public class DlgRetiro extends javax.swing.JDialog {
                 btnAceptarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, 110, 50));
+        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 150, 60));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
         btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -100,9 +104,9 @@ public class DlgRetiro extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 210, 120, 50));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 220, 160, 60));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 430, 290));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 440, 310));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 370));
 

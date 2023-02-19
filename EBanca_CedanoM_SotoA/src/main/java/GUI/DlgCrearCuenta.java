@@ -37,6 +37,9 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         this.cuentasDAO = cuentasDAO;
         this.cliente = cliente;
         initComponents();
+        
+        this.lblClienteNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
     }
     
 
@@ -65,12 +68,12 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         lblSaldo = new javax.swing.JLabel();
-        lblCuenta1 = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JLabel();
         txtSaldo = new javax.swing.JTextField();
-        lblCliente1 = new javax.swing.JLabel();
+        lblCliente = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        lblCliente = new javax.swing.JLabel();
+        lblClienteNombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Crear cuenta");
@@ -88,16 +91,23 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         lblSaldo.setText("Saldo inicial:");
         jPanel2.add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
-        lblCuenta1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
-        lblCuenta1.setForeground(new java.awt.Color(14, 47, 132));
-        lblCuenta1.setText("Crear cuenta");
-        jPanel2.add(lblCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, -1, -1));
-        jPanel2.add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 140, 50));
+        lblTitulo.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(14, 47, 132));
+        lblTitulo.setText("Crear cuenta");
+        jPanel2.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, -1));
 
-        lblCliente1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
-        lblCliente1.setForeground(new java.awt.Color(14, 47, 132));
-        lblCliente1.setText("Cliente:");
-        jPanel2.add(lblCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+        txtSaldo.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        txtSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSaldoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 140, 50));
+
+        lblCliente.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        lblCliente.setForeground(new java.awt.Color(14, 47, 132));
+        lblCliente.setText("Cliente:");
+        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
         btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -121,12 +131,13 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         });
         jPanel2.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 120, 50));
 
-        lblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblClienteNombre.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
+        lblClienteNombre.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lblClienteMouseEntered(evt);
+                lblClienteNombreMouseEntered(evt);
             }
         });
-        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 160, 30));
+        jPanel2.add(lblClienteNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 170, 40));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 380, 310));
 
@@ -145,10 +156,13 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void lblClienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblClienteMouseEntered
+    private void lblClienteNombreMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblClienteNombreMouseEntered
+
+    }//GEN-LAST:event_lblClienteNombreMouseEntered
+
+    private void txtSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaldoActionPerformed
         // TODO add your handling code here:
-        this.lblCliente.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
-    }//GEN-LAST:event_lblClienteMouseEntered
+    }//GEN-LAST:event_txtSaldoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -157,9 +171,9 @@ public class DlgCrearCuenta extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCliente;
-    private javax.swing.JLabel lblCliente1;
-    private javax.swing.JLabel lblCuenta1;
+    private javax.swing.JLabel lblClienteNombre;
     private javax.swing.JLabel lblSaldo;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
 }

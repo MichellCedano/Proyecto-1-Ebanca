@@ -6,7 +6,12 @@
 package GUI;
 
 import dominio.Cliente;
+import dominio.Cuenta;
+import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
+import interfaces.ICuentasDAO;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import validador.Validadores;
 
@@ -20,14 +25,36 @@ public class DlgTransferencia extends javax.swing.JDialog {
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
+    private final ICuentasDAO cuentasDAO;
+    
+    private int tamañoLista;
+    private List<Cuenta> listaCuentas;
     /**
      * Creates new form DlgTransferencia
      */
-    public DlgTransferencia(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente) {
+    public DlgTransferencia(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO , Cliente cliente) throws PersistenciaException {
         super(parent, modal);
-        this.clientesDAO= clientesDAO;
+        this.clientesDAO = clientesDAO;
+        this.cuentasDAO = cuentasDAO;
         this.cliente = cliente;
+        this.listaCuentas = null;
+        this.tamañoLista = 0;
         initComponents();
+        
+        try{
+            tamañoLista = cuentasDAO.consultarLista(cliente.getCodigo()).size();
+            listaCuentas = cuentasDAO.consultarLista(cliente.getCodigo());
+        }catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No se pudo consultar la lista de cuentas");
+        }
+        
+        for (int i = 0; i < tamañoLista; i++ ){
+          this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+        }
+        
+        this.txtNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
     }
 
     /**
@@ -49,10 +76,11 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblCliente = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         lblCuenta3 = new javax.swing.JLabel();
-        cbxCuentas1 = new javax.swing.JComboBox<>();
+        cbxCuentas = new javax.swing.JComboBox<>();
         btnAceptar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         lblDestino = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Transferencias");
@@ -87,6 +115,9 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblCliente.setForeground(new java.awt.Color(14, 47, 132));
         lblCliente.setText("Cliente:");
         jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
+
+        txtNombre.setEditable(false);
+        txtNombre.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 262, 49));
 
         lblCuenta3.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
@@ -94,14 +125,14 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblCuenta3.setText("Cuenta:");
         jPanel2.add(lblCuenta3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, -1));
 
-        cbxCuentas1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(cbxCuentas1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, 256, 41));
+        cbxCuentas.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(cbxCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, 256, 41));
 
         btnAceptar.setBackground(new java.awt.Color(72, 77, 197));
         btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("Aceptar");
-        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 470, 170, 70));
+        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 470, 170, 70));
 
         jPanel4.setBackground(new java.awt.Color(56, 115, 205));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -112,6 +143,17 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblDestino.setText("Destino");
         jPanel2.add(lblDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, -1, -1));
 
+        jButton1.setBackground(new java.awt.Color(72, 77, 197));
+        jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Cancelar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 470, 170, 70));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 32, 510, 580));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 650));
@@ -120,10 +162,15 @@ public class DlgTransferencia extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
-    private javax.swing.JComboBox<String> cbxCuentas1;
+    private javax.swing.JComboBox<String> cbxCuentas;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;

@@ -6,8 +6,13 @@
 package GUI;
 
 import dominio.Cliente;
+import dominio.Cuenta;
+import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,15 +24,34 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
+    private int tamañoLista;
+    private List<Cuenta> listaCuentas;
     /**
      * Creates new form DlgCancelarCuenta
      */
-    public DlgCancelarCuenta(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente) {
+    public DlgCancelarCuenta(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente) throws PersistenciaException {
         super(parent, modal);
         this.cuentasDAO = cuentasDAO;
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
+        this.listaCuentas = null;
+        this.tamañoLista = 0;
         initComponents();
+        
+        try{
+            tamañoLista = cuentasDAO.consultarLista(cliente.getCodigo()).size();
+            listaCuentas = cuentasDAO.consultarLista(cliente.getCodigo());
+        }catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No se pudo consultar la lista de cuentas");
+        }
+        
+        for (int i = 0; i < tamañoLista; i++ ){
+          this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+        }
+        
+        this.txtNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
     }
 
     /**
@@ -47,6 +71,7 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
         txtNombre = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cancelar cuenta");
@@ -62,19 +87,22 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
         lblCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
         lblCuenta.setText("Cuenta:");
-        jPanel2.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+        jPanel2.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
-        cbxCuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(cbxCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, 256, 41));
+        cbxCuentas.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(cbxCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 220, 50));
 
         lblCliente.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblCliente.setForeground(new java.awt.Color(14, 47, 132));
         lblCliente.setText("Cliente:");
-        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
-        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 210, 49));
+        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+
+        txtNombre.setEditable(false);
+        txtNombre.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 210, 49));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
-        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -82,10 +110,10 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 160, 50));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 160, 50));
 
         btnAceptar.setBackground(new java.awt.Color(72, 77, 197));
-        btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -93,7 +121,12 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
                 btnAceptarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, 160, 50));
+        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 160, 50));
+
+        jLabel1.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(14, 47, 132));
+        jLabel1.setText("Cancelar cuenta");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 450, 370));
 
@@ -115,6 +148,7 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JComboBox<String> cbxCuentas;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCliente;

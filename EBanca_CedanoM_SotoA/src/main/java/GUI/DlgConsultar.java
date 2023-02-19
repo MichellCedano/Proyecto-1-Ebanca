@@ -6,8 +6,14 @@
 package GUI;
 
 import dominio.Cliente;
+import dominio.Cuenta;
+import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
+import interfaces.ICuentasDAO;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import validador.Validadores;
 
 /**
@@ -20,17 +26,36 @@ public class DlgConsultar extends javax.swing.JDialog {
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
+    private final ICuentasDAO cuentasDAO;
+    
+    private int tamañoLista;
+    private List<Cuenta> listaCuentas;
     /**
      * Creates new form DlgConsultar
      */
-    public DlgConsultar(java.awt.Frame parent, boolean modal,  IClientesDAO clientesDAO, Cliente cliente) {
+    public DlgConsultar(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente, interfaces.ICuentasDAO cuentasDAO) throws PersistenciaException {
         super(parent, modal);
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
-        
+        this.cuentasDAO = cuentasDAO;
+        this.listaCuentas = null;
+        this.tamañoLista = 0;
         initComponents();
+        
+        try{
+            tamañoLista = cuentasDAO.consultarLista(cliente.getCodigo()).size();
+            listaCuentas = cuentasDAO.consultarLista(cliente.getCodigo());
+        }catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No se pudo consultar la lista de cuentas");
+        }
+        
+        for (int i = 0; i < tamañoLista; i++ ){
+          this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+        }
+        
     }
-
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,13 +69,14 @@ public class DlgConsultar extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         lblCuentas = new javax.swing.JLabel();
         lblConsultar = new javax.swing.JLabel();
-        lblNombreCliente = new javax.swing.JLabel();
+        lblCliente = new javax.swing.JLabel();
         cbxCuentas = new javax.swing.JComboBox<>();
         lblSaldo = new javax.swing.JLabel();
         lblCliente1 = new javax.swing.JLabel();
         lblCantSaldo = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnTransferir = new javax.swing.JButton();
+        lblCuentasClientes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar cuenta");
@@ -70,9 +96,19 @@ public class DlgConsultar extends javax.swing.JDialog {
         lblConsultar.setForeground(new java.awt.Color(14, 47, 132));
         lblConsultar.setText("Consultar cuentas");
 
-        lblNombreCliente.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 18)); // NOI18N
+        lblCliente.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 20)); // NOI18N
+        lblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblClienteMouseEntered(evt);
+            }
+        });
 
-        cbxCuentas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxCuentas.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        cbxCuentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCuentasActionPerformed(evt);
+            }
+        });
 
         lblSaldo.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblSaldo.setForeground(new java.awt.Color(14, 47, 132));
@@ -107,24 +143,27 @@ public class DlgConsultar extends javax.swing.JDialog {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblCuentas, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblCliente1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(cbxCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(lblSaldo)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblCantSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(lblConsultar, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(lblNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(125, 125, 125)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(cbxCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblSaldo)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblCantSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(255, 255, 255))
+                            .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(125, 125, 125))))
+                .addGap(18, 18, 18)
+                .addComponent(lblCuentasClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(82, 82, 82)
                 .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -137,28 +176,33 @@ public class DlgConsultar extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(lblConsultar)
-                .addGap(35, 35, 35)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCliente1))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCuentas)
-                            .addComponent(lblSaldo)))
-                    .addComponent(lblCantSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCliente1))
+                                .addGap(30, 30, 30)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cbxCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCuentas)
+                                    .addComponent(lblSaldo)))
+                            .addComponent(lblCantSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(lblCuentasClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 580, 320));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 770, 320));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 390));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 390));
 
         pack();
         setLocationRelativeTo(null);
@@ -172,7 +216,14 @@ public class DlgConsultar extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void lblClienteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblClienteMouseEntered
+        // TODO add your handling code here:
+        this.lblCliente.setText(cliente.getNombres() + " " + cliente.getApPaterno() + " " + cliente.getApMaterno());
+    }//GEN-LAST:event_lblClienteMouseEntered
 
+    private void cbxCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCuentasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxCuentasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -181,10 +232,11 @@ public class DlgConsultar extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCantSaldo;
+    private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCliente1;
     private javax.swing.JLabel lblConsultar;
     private javax.swing.JLabel lblCuentas;
-    private javax.swing.JLabel lblNombreCliente;
+    private javax.swing.JLabel lblCuentasClientes;
     private javax.swing.JLabel lblSaldo;
     // End of variables declaration//GEN-END:variables
 }

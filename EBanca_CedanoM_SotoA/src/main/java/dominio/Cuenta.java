@@ -43,6 +43,14 @@ public class Cuenta {
         this.codigoCliente = codigoCliente;
     }
 
+    public Cuenta(Integer codigo, String estado, float saldo, Integer codigoCliente) {
+        this.codigo = codigo;
+        this.estado = estado;
+        this.saldo = saldo;
+        this.codigoCliente = codigoCliente;
+    }
+
+    
     public Integer getCodigo() {
         return codigo;
     }

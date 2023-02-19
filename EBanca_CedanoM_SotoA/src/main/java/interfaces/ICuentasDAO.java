@@ -8,6 +8,8 @@ package interfaces;
 import dominio.Cliente;
 import dominio.Cuenta;
 import excepciones.PersistenciaException;
+import java.util.List;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -18,4 +20,6 @@ public interface ICuentasDAO {
     Cuenta insertar(Cuenta cuenta) throws PersistenciaException;
     
     Cuenta consultar(Integer codigoCuenta);
+    
+    List<Cuenta> consultarLista(int codigoCliente) throws PersistenciaException;
 }

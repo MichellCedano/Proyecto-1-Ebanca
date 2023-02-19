@@ -15,9 +15,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -62,7 +66,7 @@ public class CuentasDAO implements ICuentasDAO{
 
     @Override
     public Cuenta consultar(Integer codigoCuenta) {
-        String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente"
+        String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente "
                 + "from cuentas where codigo = ?";
         try (
                 Connection conexion = this.generadorConexiones.crearConexion();
@@ -87,4 +91,28 @@ public class CuentasDAO implements ICuentasDAO{
         }
     }
 
+    @Override
+    public List<Cuenta> consultarLista(int codigoCliente) throws PersistenciaException {
+        String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente "
+                + "from cuentas where codigoCliente = ?";
+        List <Cuenta> listaCuentas = new LinkedList<>();
+        try (
+                Connection conexion = this.generadorConexiones.crearConexion();
+                PreparedStatement comando = conexion.prepareStatement(sql);) {
+            comando.setInt(1, codigoCliente);
+            ResultSet registro = comando.executeQuery();
+            while (registro.next()) {
+                Integer codigo = registro.getInt("codigo");
+                String nombre = registro.getString("estado");
+                float saldo = registro.getFloat("saldo");
+                Cuenta cuenta = new Cuenta(codigo, nombre, saldo, codigoCliente);
+                listaCuentas.add(cuenta);
+            }
+            return listaCuentas;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No se pudo consultar la lista de cuentas");
+        }
+    }
+    
 }
