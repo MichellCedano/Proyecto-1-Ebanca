@@ -47,13 +47,13 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
             LOG.log(Level.SEVERE, ex.getMessage());
             throw new PersistenciaException("No se pudo consultar la lista de cuentas");
         }
-        
         for (int i = 0; i < tamañoLista; i++ ){
-          this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+          if(listaCuentas.get(i).getEstado().equals("activo"))
+          {
+              this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+          }
         }
-        
         this.txtNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
-        
     }
 
     private void actualizarEstado() {
@@ -66,6 +66,7 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
             LOG.log(Level.SEVERE,ex.getMessage());
             JOptionPane.showMessageDialog(this,"No fue posible cancelar la cuenta ","ERROR", JOptionPane.ERROR_MESSAGE);
         }
+        //TODO: label que muestre si esta activa o cancelada la cuenta
     }
     
     /**
@@ -79,13 +80,13 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        lblCuenta = new javax.swing.JLabel();
         cbxCuentas = new javax.swing.JComboBox<>();
         lblCliente = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        lblCuenta1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cancelar cuenta");
@@ -97,11 +98,6 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(149, 194, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lblCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
-        lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
-        lblCuenta.setText("Cuenta:");
-        jPanel2.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         cbxCuentas.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         jPanel2.add(cbxCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 220, 50));
@@ -140,11 +136,16 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(14, 47, 132));
         jLabel1.setText("Cancelar cuenta");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 450, 370));
+        lblCuenta1.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
+        lblCuenta1.setForeground(new java.awt.Color(14, 47, 132));
+        lblCuenta1.setText("Cuenta:");
+        jPanel2.add(lblCuenta1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 440));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 510, 370));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 440));
 
         pack();
         setLocationRelativeTo(null);
@@ -166,7 +167,7 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCliente;
-    private javax.swing.JLabel lblCuenta;
+    private javax.swing.JLabel lblCuenta1;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

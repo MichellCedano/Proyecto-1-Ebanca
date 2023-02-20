@@ -5,7 +5,9 @@
 package interfaces;
 
 import dominio.Cliente;
+import dominio.Cuenta;
 import dominio.Transferencia;
+import excepciones.PersistenciaException;
 
 /**
  *
@@ -15,5 +17,5 @@ public interface ITransferenciasDAO {
     
     Transferencia consultar(Cliente codigo);
     
-    Transferencia realizar();
+    Transferencia realizar(Integer cliente, Integer cuenta, float cantidad) throws PersistenciaException;
 }

@@ -21,7 +21,9 @@ public class Cuenta {
 
     public Cuenta() {
     }
-
+    
+    
+    
     public Cuenta(Integer codigo, String estado, Date fechaApertura, float saldo, Integer codigoCliente) {
         this.codigo = codigo;
         this.estado = "Activo";
@@ -50,10 +52,10 @@ public class Cuenta {
         this.codigoCliente = codigoCliente;
     }
 
-    public Cuenta(Integer codigoCliente) {
-        this.codigoCliente = codigoCliente;
+    public Cuenta(Integer codigo) {
+        this.codigo = codigo;
     }
-
+    
     public Integer getCodigo() {
         return codigo;
     }

@@ -8,6 +8,7 @@ package GUI;
 import dominio.Cliente;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import interfaces.ITransferenciasDAO;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import validador.Validadores;
@@ -23,13 +24,15 @@ public class DlgInicioSesion extends javax.swing.JDialog {
     
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
+    private final ITransferenciasDAO transDAO;
     /**
      * Creates new form VentanaInicioSesion
      */
-    public DlgInicioSesion(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO) {
+    public DlgInicioSesion(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO) {
         super(parent, modal);
         this.clientesDAO= clientesDAO;
         this.cuentasDAO= cuentasDAO;
+        this.transDAO= transDAO;
         initComponents();
     }
 
@@ -159,7 +162,7 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         }else if(!(Integer.parseInt(this.txtPin.getText()) == clienteConsulta.getNip())){
             JOptionPane.showMessageDialog(this,"No fue posible Iniciar sesion: pin incorrecto","ERROR", JOptionPane.ERROR_MESSAGE);
         }else{
-            new FrmInicio(clientesDAO, clienteConsulta, cuentasDAO).setVisible(true);
+            new FrmInicio(clientesDAO, clienteConsulta, cuentasDAO, transDAO).setVisible(true);
             dispose();
         }
     }//GEN-LAST:event_btnAceptarActionPerformed

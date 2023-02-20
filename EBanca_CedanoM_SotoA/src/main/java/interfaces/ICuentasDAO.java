@@ -24,4 +24,6 @@ public interface ICuentasDAO {
     Cuenta consultar(Integer codigoCuenta);
     
     List<Cuenta> consultarLista(int codigoCliente) throws PersistenciaException;
+    
+    boolean compruebaCuenta(int codigoCuenta);
 }

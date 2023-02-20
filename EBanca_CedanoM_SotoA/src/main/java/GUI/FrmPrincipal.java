@@ -7,6 +7,7 @@ package GUI;
 
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import interfaces.ITransferenciasDAO;
 import java.util.logging.Logger;
 
 /**
@@ -18,13 +19,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
+    private final ITransferenciasDAO transDAO;
     /**
      * Creates new form FrmPrincipal
      * @param clientesDAO
      */
-    public FrmPrincipal(IClientesDAO clientesDAO, ICuentasDAO cuentasDAO) {
+    public FrmPrincipal(IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO) {
         this.clientesDAO = clientesDAO;
         this.cuentasDAO = cuentasDAO;
+        this.transDAO = transDAO;
         initComponents();
     }
 
@@ -128,7 +131,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-     new DlgInicioSesion(this, true, clientesDAO,cuentasDAO).setVisible(true);
+     new DlgInicioSesion(this, true, clientesDAO,cuentasDAO,transDAO).setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed

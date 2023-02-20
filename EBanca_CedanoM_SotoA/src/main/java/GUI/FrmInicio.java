@@ -10,6 +10,7 @@ import dominio.Cuenta;
 import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import interfaces.ITransferenciasDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -28,16 +29,18 @@ public class FrmInicio extends javax.swing.JFrame {
     
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
+    private final ITransferenciasDAO transDAO;
     /**
      * Creates new form FrmInicio
      * @param clientesDAO
      * @param cliente
      * @param cuentasDAO
      */
-    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO) {
+    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO) {
         this.clientesDAO= clientesDAO;
-        this.cliente = cliente;
-        this.cuentasDAO = cuentasDAO;
+        this.cliente= cliente;
+        this.cuentasDAO= cuentasDAO;
+        this.transDAO= transDAO;
         initComponents();
         
         this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
@@ -147,7 +150,8 @@ public class FrmInicio extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 500));
 
-        menuITransaccion.setText("Transaccion");
+        menuITransaccion.setText("Transacción");
+        menuITransaccion.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuITransaccion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 menuITransaccionMouseClicked(evt);
@@ -159,6 +163,7 @@ public class FrmInicio extends javax.swing.JFrame {
             }
         });
 
+        menuItemTransferencia.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuItemTransferencia.setText("Transferencia");
         menuItemTransferencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,9 +175,12 @@ public class FrmInicio extends javax.swing.JFrame {
         jMenuBar1.add(menuITransaccion);
 
         jMenu2.setText("Cuenta");
+        jMenu2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         menuCuenta.setText("Cuenta");
+        menuCuenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        menuICrearCuenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuICrearCuenta.setText("Crear cuenta");
         menuICrearCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,6 +189,7 @@ public class FrmInicio extends javax.swing.JFrame {
         });
         menuCuenta.add(menuICrearCuenta);
 
+        menuICancelarCuenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuICancelarCuenta.setText("Cancelar cuenta");
         menuICancelarCuenta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -196,6 +205,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
         jMenu2.add(menuCuenta);
 
+        menuIActualizarDatos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuIActualizarDatos.setText("Actualizar datos");
         menuIActualizarDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,6 +217,7 @@ public class FrmInicio extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         menuIAcercaDe.setText("Acerca de");
+        menuIAcercaDe.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuIAcercaDe.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 menuIAcercaDeMouseClicked(evt);
@@ -218,6 +229,7 @@ public class FrmInicio extends javax.swing.JFrame {
             }
         });
 
+        menuItemDatos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         menuItemDatos.setText("Desarrolladores");
         menuItemDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,7 +264,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         try {
-            new DlgConsultar(this, true, clientesDAO, cliente, cuentasDAO).setVisible(true);
+            new DlgConsultar(this, true, clientesDAO, cliente, cuentasDAO, transDAO).setVisible(true);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FrmInicio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -284,7 +296,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void menuItemTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemTransferenciaActionPerformed
         try {
-            new DlgTransferencia(this, true, clientesDAO, cuentasDAO, cliente).setVisible(true);
+            new DlgTransferencia(this, true, clientesDAO, cuentasDAO, cliente, transDAO).setVisible(true);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FrmInicio.class.getName()).log(Level.SEVERE, null, ex);
         }

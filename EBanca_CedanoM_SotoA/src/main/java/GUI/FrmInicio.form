@@ -6,7 +6,10 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuITransaccion">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Transaccion"/>
+            <Property name="text" type="java.lang.String" value="Transacci&#xf3;n"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="18" style="0"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="menuITransaccionMouseClicked"/>
@@ -15,6 +18,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemTransferencia">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Transferencia"/>
               </Properties>
               <Events>
@@ -26,15 +32,24 @@
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cuenta"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="18" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="menuCuenta">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cuenta"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="18" style="0"/>
+                </Property>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="menuICrearCuenta">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Segoe UI" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Crear cuenta"/>
                   </Properties>
                   <Events>
@@ -43,6 +58,9 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="menuICancelarCuenta">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Segoe UI" size="18" style="0"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Cancelar cuenta"/>
                   </Properties>
                   <Events>
@@ -54,6 +72,9 @@
             </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="menuIActualizarDatos">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Actualizar datos"/>
               </Properties>
               <Events>
@@ -65,6 +86,9 @@
         <Menu class="javax.swing.JMenu" name="menuIAcercaDe">
           <Properties>
             <Property name="text" type="java.lang.String" value="Acerca de"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="18" style="0"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="menuIAcercaDeMouseClicked"/>
@@ -73,6 +97,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemDatos">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Desarrolladores"/>
               </Properties>
               <Events>

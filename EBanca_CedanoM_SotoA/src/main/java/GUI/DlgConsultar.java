@@ -10,6 +10,8 @@ import dominio.Cuenta;
 import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import interfaces.ITransferenciasDAO;
+import java.awt.event.ItemEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,17 +29,18 @@ public class DlgConsultar extends javax.swing.JDialog {
     
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
-    
+    private final ITransferenciasDAO transDAO;
     private int tamañoLista;
     private List<Cuenta> listaCuentas;
     /**
      * Creates new form DlgConsultar
      */
-    public DlgConsultar(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente, interfaces.ICuentasDAO cuentasDAO) throws PersistenciaException {
+    public DlgConsultar(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO) throws PersistenciaException {
         super(parent, modal);
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
         this.cuentasDAO = cuentasDAO;
+        this.transDAO = transDAO;
         this.listaCuentas = null;
         this.tamañoLista = 0;
         initComponents();
@@ -52,6 +55,9 @@ public class DlgConsultar extends javax.swing.JDialog {
         for (int i = 0; i < tamañoLista; i++ ){
           this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
         }
+        
+        this.lblCliente.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
         
     }
  
@@ -75,6 +81,8 @@ public class DlgConsultar extends javax.swing.JDialog {
         lblCantSaldo = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnTransferir = new javax.swing.JButton();
+        txtEstado = new javax.swing.JTextField();
+        lblCuenta = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar cuenta");
@@ -85,14 +93,17 @@ public class DlgConsultar extends javax.swing.JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(149, 194, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblCuentas.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblCuentas.setForeground(new java.awt.Color(14, 47, 132));
         lblCuentas.setText("Cuenta(s):");
+        jPanel2.add(lblCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 172, -1, -1));
 
         lblConsultar.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblConsultar.setForeground(new java.awt.Color(14, 47, 132));
         lblConsultar.setText("Consultar cuentas");
+        jPanel2.add(lblConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(198, 22, -1, -1));
 
         lblCliente.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 20)); // NOI18N
         lblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -100,21 +111,31 @@ public class DlgConsultar extends javax.swing.JDialog {
                 lblClienteMouseEntered(evt);
             }
         });
+        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 173, 29));
 
         cbxCuentas.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        cbxCuentas.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxCuentasItemStateChanged(evt);
+            }
+        });
         cbxCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxCuentasActionPerformed(evt);
             }
         });
+        jPanel2.add(cbxCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 175, 141, 32));
 
         lblSaldo.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblSaldo.setForeground(new java.awt.Color(14, 47, 132));
         lblSaldo.setText("Saldo:");
+        jPanel2.add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 172, -1, -1));
 
         lblCliente1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblCliente1.setForeground(new java.awt.Color(14, 47, 132));
         lblCliente1.setText("Cliente:");
+        jPanel2.add(lblCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 110, -1, -1));
+        jPanel2.add(lblCantSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(408, 174, 83, 33));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
         btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -125,85 +146,38 @@ public class DlgConsultar extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 239, 170, 50));
 
         btnTransferir.setBackground(new java.awt.Color(72, 77, 197));
         btnTransferir.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         btnTransferir.setForeground(new java.awt.Color(255, 255, 255));
-        btnTransferir.setText("Transferir");
+        btnTransferir.setText("Consutlar");
         btnTransferir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTransferirActionPerformed(evt);
             }
         });
+        jPanel2.add(btnTransferir, new org.netbeans.lib.awtextra.AbsoluteConstraints(177, 239, 160, 50));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblCuentas, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblCliente1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(380, 380, 380))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(cbxCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(lblSaldo)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblCantSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(255, 255, 255))))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(86, 86, 86)
-                        .addComponent(lblConsultar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lblConsultar)
-                .addGap(39, 39, 39)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCliente1))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbxCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCuentas)
-                            .addComponent(lblSaldo)))
-                    .addComponent(lblCantSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31))
-        );
+        txtEstado.setEditable(false);
+        txtEstado.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        jPanel2.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 170, 120, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 500, 320));
+        lblCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
+        lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
+        lblCuenta.setText("Estado:");
+        jPanel2.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 170, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 390));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 750, 320));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 830, 390));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
-        dispose();
+        
     }//GEN-LAST:event_btnTransferirActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -219,6 +193,14 @@ public class DlgConsultar extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxCuentasActionPerformed
 
+    private void cbxCuentasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxCuentasItemStateChanged
+        if(evt.getStateChange() == ItemEvent.SELECTED){
+            int codigoCuenta = Integer.parseInt(evt.getItem().toString());
+            String estadoCuenta = cuentasDAO.consultar(codigoCuenta).getEstado();
+            this.txtEstado.setText(estadoCuenta);
+        }
+    }//GEN-LAST:event_cbxCuentasItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnTransferir;
@@ -229,7 +211,9 @@ public class DlgConsultar extends javax.swing.JDialog {
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCliente1;
     private javax.swing.JLabel lblConsultar;
+    private javax.swing.JLabel lblCuenta;
     private javax.swing.JLabel lblCuentas;
     private javax.swing.JLabel lblSaldo;
+    private javax.swing.JTextField txtEstado;
     // End of variables declaration//GEN-END:variables
 }

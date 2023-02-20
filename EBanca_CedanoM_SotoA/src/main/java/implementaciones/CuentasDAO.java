@@ -131,4 +131,25 @@ public class CuentasDAO implements ICuentasDAO{
         }
     }
     
+    public boolean compruebaCuenta(int codigoCuenta){
+        String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente "
+                + "from cuentas where codigo = ?";
+        try (
+                Connection conexion = this.generadorConexiones.crearConexion();
+                PreparedStatement comando = conexion.prepareStatement(sql);) {
+            comando.setInt(1, codigoCuenta);
+            ResultSet registro = comando.executeQuery();
+            // SI SE ENCONTRÓ A LA CUENTA
+            Cuenta cuenta = null;
+            if (registro.next()) {
+                
+            }
+            return true;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            return false;
+        }
+        
+    }
+    
 }

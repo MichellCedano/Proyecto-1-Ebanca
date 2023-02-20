@@ -7,12 +7,15 @@ package GUI;
 
 import dominio.Cliente;
 import dominio.Cuenta;
+import dominio.Transferencia;
 import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
+import interfaces.ITransferenciasDAO;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import validador.Validadores;
 
 /**
@@ -21,21 +24,24 @@ import validador.Validadores;
  */
 public class DlgTransferencia extends javax.swing.JDialog {
     private Cliente cliente = null;
+    private Cuenta cuenta = null;
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
+    private final ITransferenciasDAO transDAO;
     
     private int tamañoLista;
     private List<Cuenta> listaCuentas;
     /**
      * Creates new form DlgTransferencia
      */
-    public DlgTransferencia(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO , Cliente cliente) throws PersistenciaException {
+    public DlgTransferencia(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente, ITransferenciasDAO transDAO) throws PersistenciaException {
         super(parent, modal);
         this.clientesDAO = clientesDAO;
         this.cuentasDAO = cuentasDAO;
+        this.transDAO = transDAO;
         this.cliente = cliente;
         this.listaCuentas = null;
         this.tamañoLista = 0;
@@ -50,13 +56,39 @@ public class DlgTransferencia extends javax.swing.JDialog {
         }
         
         for (int i = 0; i < tamañoLista; i++ ){
-          this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+          if(listaCuentas.get(i).getEstado().equals("activo"))
+          {
+              this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+          }
         }
-        
         this.txtNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
-        
     }
-
+    
+    private int validarCuentaDestino(){
+        int cuentaD = Integer.parseInt(txtCuentaDestino.getText());
+        if(cuentasDAO.compruebaCuenta(cuentaD) && cuentasDAO.consultar(cuentaD).getEstado().equals("cancelada")){
+           JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia","ERROR", JOptionPane.ERROR_MESSAGE);
+           return 0;
+        }
+        return cuentaD;
+    }
+    
+    
+    private void realizar() {
+            
+        int cuentaO = Integer.parseInt(cbxCuentas.getSelectedItem().toString());
+        float monto = Float.parseFloat(txtMonto.getText());
+        
+        try {
+            int cuentaDestino = validarCuentaDestino();
+            
+            transDAO.realizar(cuentaO, cuentaDestino, monto);
+             JOptionPane.showMessageDialog(this,"Se transfirio a la cuenta: "+ cuentaDestino + " Desde la cuenta: "+ cuentaO,"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenciaException ex) {
+             LOG.log(Level.SEVERE,ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia","ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,7 +101,7 @@ public class DlgTransferencia extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         lblOrigen = new javax.swing.JLabel();
-        txtCuentaDestino1 = new javax.swing.JTextField();
+        txtCuentaDestino = new javax.swing.JTextField();
         lblCuenta = new javax.swing.JLabel();
         lblMonto = new javax.swing.JLabel();
         txtMonto = new javax.swing.JTextField();
@@ -96,9 +128,16 @@ public class DlgTransferencia extends javax.swing.JDialog {
 
         lblOrigen.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblOrigen.setForeground(new java.awt.Color(14, 47, 132));
-        lblOrigen.setText("Origen");
-        jPanel2.add(lblOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, -1, -1));
-        jPanel2.add(txtCuentaDestino1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 262, 49));
+        lblOrigen.setText("Transferencia");
+        jPanel2.add(lblOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, -1));
+
+        txtCuentaDestino.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        txtCuentaDestino.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCuentaDestinoKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtCuentaDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 262, 49));
 
         lblCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
         lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
@@ -109,6 +148,13 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblMonto.setForeground(new java.awt.Color(14, 47, 132));
         lblMonto.setText("Monto:");
         jPanel2.add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, -1, -1));
+
+        txtMonto.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        txtMonto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMontoKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 390, 133, 49));
 
         lblCliente.setFont(new java.awt.Font("Microsoft YaHei", 1, 36)); // NOI18N
@@ -116,7 +162,6 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblCliente.setText("Cliente:");
         jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
-        txtNombre.setEditable(false);
         txtNombre.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 262, 49));
 
@@ -132,6 +177,11 @@ public class DlgTransferencia extends javax.swing.JDialog {
         btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
         jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 470, 170, 70));
 
         jPanel4.setBackground(new java.awt.Color(56, 115, 205));
@@ -166,6 +216,27 @@ public class DlgTransferencia extends javax.swing.JDialog {
        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        // TODO add your handling code here:
+        realizar();
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void txtCuentaDestinoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuentaDestinoKeyTyped
+       int key = evt.getKeyChar();
+        boolean numeros = key >= 48 && key <= 57;
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCuentaDestinoKeyTyped
+
+    private void txtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyTyped
+        int key = evt.getKeyChar();
+        boolean numeros = key >= 48 && key <= 57;
+        if (!numeros) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtMontoKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -180,7 +251,7 @@ public class DlgTransferencia extends javax.swing.JDialog {
     private javax.swing.JLabel lblDestino;
     private javax.swing.JLabel lblMonto;
     private javax.swing.JLabel lblOrigen;
-    private javax.swing.JTextField txtCuentaDestino1;
+    private javax.swing.JTextField txtCuentaDestino;
     private javax.swing.JTextField txtMonto;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

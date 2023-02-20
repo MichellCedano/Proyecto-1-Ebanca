@@ -10,9 +10,11 @@ import GUI.FrmPrincipal;
 import implementaciones.ClientesDAO;
 import implementaciones.ConexionBD;
 import implementaciones.CuentasDAO;
+import implementaciones.TransferenciasDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import interfaces.ICuentasDAO;
+import interfaces.ITransferenciasDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,7 +31,7 @@ public class Inicio {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        IConexionBD generadorConexiones = new ConexionBD("jdbc:mysql://localhost/e_banca","root","AlexaSoto1");
+        IConexionBD generadorConexiones = new ConexionBD("jdbc:mysql://localhost/e_banca","root","8181");
         try{
   
     
@@ -39,8 +41,8 @@ public class Inicio {
 
             IClientesDAO clientesDAO = new ClientesDAO(generadorConexiones);
             ICuentasDAO cuentasDAO = new CuentasDAO(generadorConexiones);
-            
-             new FrmPrincipal(clientesDAO,cuentasDAO).setVisible(true);
+            ITransferenciasDAO transDAO = new TransferenciasDAO(generadorConexiones);
+             new FrmPrincipal(clientesDAO,cuentasDAO, transDAO).setVisible(true);
             
             
         }catch(SQLException ex){
