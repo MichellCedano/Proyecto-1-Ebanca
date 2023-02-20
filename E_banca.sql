@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `e_banca` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `e_banca`;
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: localhost    Database: e_banca
@@ -36,7 +34,7 @@ CREATE TABLE `clientes` (
   PRIMARY KEY (`codigo`),
   KEY `codigoDireccion` (`codigoDireccion`),
   CONSTRAINT `clientes_ibfk_1` FOREIGN KEY (`codigoDireccion`) REFERENCES `direcciones` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +43,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,'asd','asd','asd','2002-02-02',21,1234,9),(2,'Alexa','Soto','Esquer','2002-02-02',21,1122,10);
+INSERT INTO `clientes` VALUES (1,'asd','asd','asd','2002-02-02',21,1234,9),(2,'Alexa','Soto','Esquer','2002-02-02',21,1122,10),(3,'sadsa','dasdas','asdas','2002-02-02',21,1244,12);
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +63,7 @@ CREATE TABLE `cuentas` (
   PRIMARY KEY (`codigo`),
   KEY `codigoCliente` (`codigoCliente`),
   CONSTRAINT `cuentas_ibfk_1` FOREIGN KEY (`codigoCliente`) REFERENCES `clientes` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,6 +72,7 @@ CREATE TABLE `cuentas` (
 
 LOCK TABLES `cuentas` WRITE;
 /*!40000 ALTER TABLE `cuentas` DISABLE KEYS */;
+INSERT INTO `cuentas` VALUES (1,'activo','2023-02-18',67,1),(2,'activo','2023-02-18',766,1),(3,'cancelada','2023-02-19',1349,1);
 /*!40000 ALTER TABLE `cuentas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +89,7 @@ CREATE TABLE `direcciones` (
   `numero` varchar(10) NOT NULL,
   `colonia` varchar(50) NOT NULL,
   PRIMARY KEY (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +98,7 @@ CREATE TABLE `direcciones` (
 
 LOCK TABLES `direcciones` WRITE;
 /*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
-INSERT INTO `direcciones` VALUES (1,'asss','33','dada'),(2,'asd','12','asd'),(3,'paris','33','cortinas'),(4,'paris','33','cortinas'),(5,'paris','33','cortinas'),(6,'paris','44','cortinas'),(7,'paris','44','cortinas'),(8,'paris','66','cortinas'),(9,'asd','233','asd'),(10,'reforma','44','dias'),(11,'234s','1221','sadas');
+INSERT INTO `direcciones` VALUES (1,'asss','33','dada'),(2,'asd','12','asd'),(3,'paris','33','cortinas'),(4,'paris','33','cortinas'),(5,'paris','33','cortinas'),(6,'paris','44','cortinas'),(7,'paris','44','cortinas'),(8,'paris','66','cortinas'),(9,'asd','233','asd'),(10,'reforma','44','dias'),(11,'234s','1221','sadas'),(12,'sdasd','213','asdsad');
 /*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +150,7 @@ CREATE TABLE `transferencias` (
   KEY `codigoCuentaDestino` (`codigoCuentaDestino`),
   CONSTRAINT `transferencias_ibfk_1` FOREIGN KEY (`codigoCuenta`) REFERENCES `cuentas` (`codigo`),
   CONSTRAINT `transferencias_ibfk_2` FOREIGN KEY (`codigoCuentaDestino`) REFERENCES `cuentas` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,8 +159,75 @@ CREATE TABLE `transferencias` (
 
 LOCK TABLES `transferencias` WRITE;
 /*!40000 ALTER TABLE `transferencias` DISABLE KEYS */;
+INSERT INTO `transferencias` VALUES (1,'2023-02-19','transferencia',100,1,2),(2,'2023-02-19','transferencia',100,1,2),(3,'2023-02-19','transferencia',100,3,2),(4,'2023-02-19','transferencia',100,1,2),(5,'2023-02-19','transferencia',100,1,2),(6,'2023-02-19','transferencia',100,1,3),(7,'2023-02-19','transferencia',100,1,3),(8,'2023-02-19','transferencia',100,1,3),(9,'2023-02-19','transferencia',100,2,3),(10,'2023-02-19','transferencia',100,2,3),(11,'2023-02-19','transferencia',100,1,3),(12,'2023-02-19','transferencia',100,2,1),(13,'2023-02-19','transferencia',100,2,3),(14,'2023-02-19','transferencia',10,1,3),(15,'2023-02-19','transferencia',100,1,3),(16,'2023-02-19','transferencia',100,1,2),(17,'2023-02-19','transferencia',100,1,3),(18,'2023-02-19','transferencia',100,2,3),(19,'2023-02-19','transferencia',100,2,1),(20,'2023-02-19','transferencia',100,2,1),(21,'2023-02-19','transferencia',100,2,1),(22,'2023-02-19','transferencia',3,2,2),(23,'2023-02-19','transferencia',1,1,3),(24,'2023-02-19','transferencia',100,1,3),(30,'2023-02-19','transferencia',2,1,3),(31,'2023-02-19','transferencia',2,1,3),(32,'2023-02-19','transferencia',34,2,3);
 /*!40000 ALTER TABLE `transferencias` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'e_banca'
+--
+
+--
+-- Dumping routines for database 'e_banca'
+--
+/*!50003 DROP FUNCTION IF EXISTS `fx_genera_claves_al_azar` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `fx_genera_claves_al_azar`() RETURNS varchar(50) CHARSET utf8mb3
+BEGIN
+    declare alfa VARCHAR(62) default 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+    declare clave varchar(50) default '';
+    
+    set clave=concat(
+                SUBSTRING(alfa,rand()*62,1),
+                        SUBSTRING(alfa,rand()*62,1),
+                        SUBSTRING(alfa,rand()*62,1),
+                        SUBSTRING(alfa,rand()*62,1),
+                        SUBSTRING(alfa,rand()*62,1),
+                        SUBSTRING(alfa,rand()*62,1)
+                    );
+    RETURN clave;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `realizaTransferencias` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `realizaTransferencias`(
+IN cantidadRetiro FLOAT, IN cuentaOrigen INT, IN cuentaDestino INT)
+BEGIN
+	UPDATE CUENTAS
+    SET saldo = saldo - cantidadRetiro
+    WHERE codigo = cuentaOrigen;
+    UPDATE CUENTAS
+    SET saldo = saldo + cantidadRetiro
+    WHERE codigo = cuentaDestino;
+    INSERT INTO transferencias (tipo, cantidad, codigoCuenta, codigoCuentaDestino)
+    VALUES ("transferencia", cantidadRetiro, cuentaOrigen, cuentaDestino);
+    ROLLBACK;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -172,4 +238,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-16 10:35:05
+-- Dump completed on 2023-02-19 23:51:08
