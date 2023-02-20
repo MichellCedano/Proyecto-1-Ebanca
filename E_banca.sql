@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `e_banca` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `e_banca`;
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
 -- Host: localhost    Database: e_banca
@@ -72,7 +74,7 @@ CREATE TABLE `cuentas` (
 
 LOCK TABLES `cuentas` WRITE;
 /*!40000 ALTER TABLE `cuentas` DISABLE KEYS */;
-INSERT INTO `cuentas` VALUES (1,'activo','2023-02-18',67,1),(2,'activo','2023-02-18',766,1),(3,'cancelada','2023-02-19',1349,1);
+INSERT INTO `cuentas` VALUES (1,'activo','2023-02-18',43,1),(2,'activo','2023-02-18',566,1),(3,'cancelada','2023-02-19',1473,1);
 /*!40000 ALTER TABLE `cuentas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +114,7 @@ DROP TABLE IF EXISTS `retiros`;
 CREATE TABLE `retiros` (
   `folio` int NOT NULL AUTO_INCREMENT,
   `cantidad` int NOT NULL,
-  `contraseña` int NOT NULL,
+  `contraseña` varchar(8) NOT NULL,
   `codigoCuentaDestino` int NOT NULL,
   `fechaRetiro` date NOT NULL DEFAULT (curdate()),
   `estado` enum('cancelado','retirado') DEFAULT NULL,
@@ -150,7 +152,7 @@ CREATE TABLE `transferencias` (
   KEY `codigoCuentaDestino` (`codigoCuentaDestino`),
   CONSTRAINT `transferencias_ibfk_1` FOREIGN KEY (`codigoCuenta`) REFERENCES `cuentas` (`codigo`),
   CONSTRAINT `transferencias_ibfk_2` FOREIGN KEY (`codigoCuentaDestino`) REFERENCES `cuentas` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +161,7 @@ CREATE TABLE `transferencias` (
 
 LOCK TABLES `transferencias` WRITE;
 /*!40000 ALTER TABLE `transferencias` DISABLE KEYS */;
-INSERT INTO `transferencias` VALUES (1,'2023-02-19','transferencia',100,1,2),(2,'2023-02-19','transferencia',100,1,2),(3,'2023-02-19','transferencia',100,3,2),(4,'2023-02-19','transferencia',100,1,2),(5,'2023-02-19','transferencia',100,1,2),(6,'2023-02-19','transferencia',100,1,3),(7,'2023-02-19','transferencia',100,1,3),(8,'2023-02-19','transferencia',100,1,3),(9,'2023-02-19','transferencia',100,2,3),(10,'2023-02-19','transferencia',100,2,3),(11,'2023-02-19','transferencia',100,1,3),(12,'2023-02-19','transferencia',100,2,1),(13,'2023-02-19','transferencia',100,2,3),(14,'2023-02-19','transferencia',10,1,3),(15,'2023-02-19','transferencia',100,1,3),(16,'2023-02-19','transferencia',100,1,2),(17,'2023-02-19','transferencia',100,1,3),(18,'2023-02-19','transferencia',100,2,3),(19,'2023-02-19','transferencia',100,2,1),(20,'2023-02-19','transferencia',100,2,1),(21,'2023-02-19','transferencia',100,2,1),(22,'2023-02-19','transferencia',3,2,2),(23,'2023-02-19','transferencia',1,1,3),(24,'2023-02-19','transferencia',100,1,3),(30,'2023-02-19','transferencia',2,1,3),(31,'2023-02-19','transferencia',2,1,3),(32,'2023-02-19','transferencia',34,2,3);
+INSERT INTO `transferencias` VALUES (1,'2023-02-19','transferencia',100,1,2),(2,'2023-02-19','transferencia',100,1,2),(3,'2023-02-19','transferencia',100,3,2),(4,'2023-02-19','transferencia',100,1,2),(5,'2023-02-19','transferencia',100,1,2),(6,'2023-02-19','transferencia',100,1,3),(7,'2023-02-19','transferencia',100,1,3),(8,'2023-02-19','transferencia',100,1,3),(9,'2023-02-19','transferencia',100,2,3),(10,'2023-02-19','transferencia',100,2,3),(11,'2023-02-19','transferencia',100,1,3),(12,'2023-02-19','transferencia',100,2,1),(13,'2023-02-19','transferencia',100,2,3),(14,'2023-02-19','transferencia',10,1,3),(15,'2023-02-19','transferencia',100,1,3),(16,'2023-02-19','transferencia',100,1,2),(17,'2023-02-19','transferencia',100,1,3),(18,'2023-02-19','transferencia',100,2,3),(19,'2023-02-19','transferencia',100,2,1),(20,'2023-02-19','transferencia',100,2,1),(21,'2023-02-19','transferencia',100,2,1),(22,'2023-02-19','transferencia',3,2,2),(23,'2023-02-19','transferencia',1,1,3),(24,'2023-02-19','transferencia',100,1,3),(30,'2023-02-19','transferencia',2,1,3),(31,'2023-02-19','transferencia',2,1,3),(32,'2023-02-19','transferencia',34,2,3),(33,'2023-02-19','transferencia',24,1,3),(34,'2023-02-20','transferencia',100,1,3),(36,'2023-02-20','transferencia',100,2,1);
 /*!40000 ALTER TABLE `transferencias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,36 +172,6 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'e_banca'
 --
-/*!50003 DROP FUNCTION IF EXISTS `fx_genera_claves_al_azar` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `fx_genera_claves_al_azar`() RETURNS varchar(50) CHARSET utf8mb3
-BEGIN
-    declare alfa VARCHAR(62) default 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
-    declare clave varchar(50) default '';
-    
-    set clave=concat(
-                SUBSTRING(alfa,rand()*62,1),
-                        SUBSTRING(alfa,rand()*62,1),
-                        SUBSTRING(alfa,rand()*62,1),
-                        SUBSTRING(alfa,rand()*62,1),
-                        SUBSTRING(alfa,rand()*62,1),
-                        SUBSTRING(alfa,rand()*62,1)
-                    );
-    RETURN clave;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `realizaTransferencias` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -238,4 +210,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-19 23:51:08
+-- Dump completed on 2023-02-20 15:48:19

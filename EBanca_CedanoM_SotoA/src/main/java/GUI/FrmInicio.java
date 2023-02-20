@@ -108,8 +108,6 @@ public class FrmInicio extends javax.swing.JFrame {
         });
         jPanel3.add(btnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 260, 75));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Logo_Ebanca.png"))); // NOI18N
-
         jButton1.setBackground(new java.awt.Color(72, 77, 197));
         jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
