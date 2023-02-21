@@ -32,18 +32,28 @@ public class ClientesDAO implements IClientesDAO {
     private static final Logger LOG = Logger.getLogger(ClientesDAO.class.getName());
     private final IConexionBD generadorConexiones;
 
+    /**
+     * Constructor que genera la conexión con la base de datos
+     *
+     * @param generadorConexiones
+     */
     public ClientesDAO(IConexionBD generadorConexiones) {
         this.generadorConexiones = generadorConexiones;
     }
 
+    /**
+     * Método que consulta a un cliente
+     *
+     * @param codigoCliente Código del cliente a consultar
+     * @return Cliente consultado
+     */
     @Override
     public Cliente consultar(Integer codigoCliente) {
         String sql = "select codigo, nombre, apellidoPaterno, apellidoMaterno, "
                 + "fechaNacimiento, edad, nip, codigoDireccion "
                 + "from clientes where codigo = ?";
         try (
-                Connection conexion = this.generadorConexiones.crearConexion();
-                PreparedStatement comando = conexion.prepareStatement(sql);) {
+                Connection conexion = this.generadorConexiones.crearConexion(); PreparedStatement comando = conexion.prepareStatement(sql);) {
             comando.setInt(1, codigoCliente);
             ResultSet registro = comando.executeQuery();
             // SI SE ENCONTRÓ AL CLIENTE...
@@ -67,23 +77,29 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * Método que inserta a un cliente
+     *
+     * @param cliente Cliente que se quiere insertar
+     * @param direccion Dirección del cliente
+     * @param fecha Fecha de nacimiento
+     * @return Cliente insertado
+     * @throws PersistenciaException
+     */
     @Override
     public Cliente insertar(Cliente cliente, Direccion direccion, String fecha) throws PersistenciaException {
         String sqlD = "insert into direcciones("
                 + "calle, numero, colonia)"
                 + "values (?,?,?)";
-        
+
         String sql = "insert into clientes("
                 + "nombre, apellidoPaterno, apellidoMaterno, codigoDireccion, fechaNacimiento, nip)"
                 + "values (?,?,?,?,?,?)";
-        try (              
-                Connection conexion = this.generadorConexiones.crearConexion();
-                PreparedStatement comando2 = conexion.prepareStatement(
-                        sqlD, Statement.RETURN_GENERATED_KEYS);
-                PreparedStatement comando = conexion.prepareStatement(
-                        sql, Statement.RETURN_GENERATED_KEYS);
-                ) {
-            
+        try (
+                Connection conexion = this.generadorConexiones.crearConexion(); PreparedStatement comando2 = conexion.prepareStatement(
+                sqlD, Statement.RETURN_GENERATED_KEYS); PreparedStatement comando = conexion.prepareStatement(
+                        sql, Statement.RETURN_GENERATED_KEYS);) {
+
             comando2.setString(1, direccion.getCalle());
             comando2.setString(2, direccion.getNumeroCasa());
             comando2.setString(3, direccion.getColonia());
@@ -93,7 +109,7 @@ public class ClientesDAO implements IClientesDAO {
             if (llavesGeneradas1.next()) {
                 Integer llavePrimaria = llavesGeneradas1.getInt(1);
                 cliente.setCodigoDireccion(llavePrimaria);
-            }        
+            }
             comando.setString(1, cliente.getNombres());
             comando.setString(2, cliente.getApPaterno());
             comando.setString(3, cliente.getApMaterno());
@@ -115,18 +131,23 @@ public class ClientesDAO implements IClientesDAO {
             LOG.log(Level.SEVERE, ex.getMessage());
             throw new PersistenciaException("No fue posible registrar al cliente");
         }
-        
+
     }
 
-    
+    /**
+     * Método que consulta la lista de clientes
+     *
+     * @param paginado
+     * @return Lista de clientes
+     * @throws PersistenciaException
+     */
     @Override
     public List<Cliente> consultarLista(ConfiguracionPaginado paginado) throws PersistenciaException {
         String sql = "select codigo, nombre, apellidoPaterno, apellidoMaterno, codigoDireccion "
                 + "from clientes LIMIT ? OFFSET ?";
-        List <Cliente> listaClientes = new LinkedList<>();
+        List<Cliente> listaClientes = new LinkedList<>();
         try (
-                Connection conexion = this.generadorConexiones.crearConexion();
-                PreparedStatement comando = conexion.prepareStatement(sql);) {
+                Connection conexion = this.generadorConexiones.crearConexion(); PreparedStatement comando = conexion.prepareStatement(sql);) {
             comando.setInt(1, paginado.getElementosPagina());
             comando.setInt(2, paginado.getNumPagina());
             ResultSet registro = comando.executeQuery();
@@ -150,12 +171,20 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    /**
+     * Método que actualiza los datos personales del cliente
+     *
+     * @param codigoCliente Código del cliente que se quiere actualizar
+     * @param nvoNombre Nuevo nombre
+     * @param nvoApPaterno Nuevo apellido paterno
+     * @param nvoApMaterno Nuevo apellido materno
+     * @throws PersistenciaException
+     */
     @Override
     public void actualizarDatosPersonales(Integer codigoCliente, String nvoNombre, String nvoApPaterno, String nvoApMaterno) throws PersistenciaException {
         String sqlT = "{call actualizarDatosPersonales(?,?,?,?)}";
 
-        try (Connection conexion = this.generadorConexiones.crearConexion(); 
-                CallableStatement cst = conexion.prepareCall(sqlT);) {
+        try (Connection conexion = this.generadorConexiones.crearConexion(); CallableStatement cst = conexion.prepareCall(sqlT);) {
 
             cst.setInt(1, codigoCliente);
             cst.setString(2, nvoNombre);

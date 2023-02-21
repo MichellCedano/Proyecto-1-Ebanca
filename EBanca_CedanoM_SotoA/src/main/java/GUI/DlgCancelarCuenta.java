@@ -10,7 +10,6 @@ import dominio.Cuenta;
 import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +20,7 @@ import javax.swing.JOptionPane;
  * @author koine
  */
 public class DlgCancelarCuenta extends javax.swing.JDialog {
+
     private Cliente cliente = null;
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
@@ -28,47 +28,57 @@ public class DlgCancelarCuenta extends javax.swing.JDialog {
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     private int tamañoLista;
     private List<Cuenta> listaCuentas;
+
     /**
-     * Creates new form DlgCancelarCuenta
+     * Constructor que inicializa todos los atributos al valor de sus parámetros
+     *
+     * @param parent
+     * @param modal
+     * @param clientesDAO
+     * @param cuentasDAO
+     * @param cliente
+     * @throws PersistenciaException
      */
     public DlgCancelarCuenta(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente) throws PersistenciaException {
         super(parent, modal);
         this.cuentasDAO = cuentasDAO;
-        this.clientesDAO= clientesDAO;
+        this.clientesDAO = clientesDAO;
         this.cliente = cliente;
         this.listaCuentas = null;
         this.tamañoLista = 0;
         initComponents();
-        
-        try{
+
+        try {
             tamañoLista = cuentasDAO.consultarLista(cliente.getCodigo()).size();
             listaCuentas = cuentasDAO.consultarLista(cliente.getCodigo());
-        }catch (PersistenciaException ex) {
+        } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             throw new PersistenciaException("No se pudo consultar la lista de cuentas");
         }
-        for (int i = 0; i < tamañoLista; i++ ){
-          if(listaCuentas.get(i).getEstado().equals("activo"))
-          {
-              this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
-          }
+        for (int i = 0; i < tamañoLista; i++) {
+            if (listaCuentas.get(i).getEstado().equals("activo")) {
+                this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+            }
         }
-        this.txtNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        this.txtNombre.setText(cliente.getNombres() + " " + cliente.getApPaterno() + " " + cliente.getApMaterno());
     }
 
+    /**
+     * Método que actualiza el estado de una cuenta
+     */
     private void actualizarEstado() {
         Cuenta cuenta = new Cuenta();
         cuenta.setCodigo(Integer.parseInt(cbxCuentas.getSelectedItem().toString()));
         try {
             cuentasDAO.actualizarEstado(cuenta);
-            JOptionPane.showMessageDialog(this,"Se canceló la cuenta: "+ cuenta.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Se canceló la cuenta: " + cuenta.getCodigo(), "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
         } catch (PersistenciaException ex) {
-            LOG.log(Level.SEVERE,ex.getMessage());
-            JOptionPane.showMessageDialog(this,"No fue posible cancelar la cuenta ","ERROR", JOptionPane.ERROR_MESSAGE);
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible cancelar la cuenta ", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         //TODO: label que muestre si esta activa o cancelada la cuenta
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

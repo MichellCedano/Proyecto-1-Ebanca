@@ -17,8 +17,6 @@ import utils.ConfiguracionPaginado;
  */
 public interface ITransferenciasDAO {
     
-    Transferencia consultar(Cliente codigo);
-    
     Transferencia realizar(Integer cliente, Integer cuenta, float cantidad) throws PersistenciaException;
     
     List<Transferencia> consultarLista(ConfiguracionPaginado paginado, Integer codigoCuenta) throws PersistenciaException;

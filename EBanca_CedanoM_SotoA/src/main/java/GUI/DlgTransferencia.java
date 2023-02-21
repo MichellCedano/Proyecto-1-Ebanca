@@ -23,19 +23,29 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgTransferencia extends javax.swing.JDialog {
+
     private Cliente cliente = null;
     private Cuenta cuenta = null;
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
-    
+
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
-    
+
     private int tamañoLista;
     private List<Cuenta> listaCuentas;
+
     /**
-     * Creates new form DlgTransferencia
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     *
+     * @param parent
+     * @param modal
+     * @param clientesDAO
+     * @param cuentasDAO
+     * @param cliente
+     * @param transDAO
+     * @throws PersistenciaException
      */
     public DlgTransferencia(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente, ITransferenciasDAO transDAO) throws PersistenciaException {
         super(parent, modal);
@@ -46,50 +56,73 @@ public class DlgTransferencia extends javax.swing.JDialog {
         this.listaCuentas = null;
         this.tamañoLista = 0;
         initComponents();
-        
-        try{
+
+        try {
             tamañoLista = cuentasDAO.consultarLista(cliente.getCodigo()).size();
             listaCuentas = cuentasDAO.consultarLista(cliente.getCodigo());
-        }catch (PersistenciaException ex) {
+        } catch (PersistenciaException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             throw new PersistenciaException("No se pudo consultar la lista de cuentas");
         }
-        
-        for (int i = 0; i < tamañoLista; i++ ){
-          if(listaCuentas.get(i).getEstado().equals("activo"))
-          {
-              this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
-          }
+
+        for (int i = 0; i < tamañoLista; i++) {
+            if (listaCuentas.get(i).getEstado().equals("activo")) {
+                this.cbxCuentas.addItem(listaCuentas.get(i).getCodigo().toString());
+            }
         }
-        this.txtNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        this.txtNombre.setText(cliente.getNombres() + " " + cliente.getApPaterno() + " " + cliente.getApMaterno());
     }
-    
-    private int validarCuentaDestino(){
+
+    /**
+     * Método que valida el monto de la cuenta de origen
+     *
+     * @return Cuenta con el monto correcto
+     */
+    private Cuenta validarMontoCuentaOrigen() {
+        int cuentaO = Integer.parseInt(cbxCuentas.getSelectedItem().toString());
+        float monto = Float.parseFloat(txtMonto.getText());
+
+        if (monto > cuentasDAO.consultar(cuentaO).getSaldo()) {
+            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia, dinero insuficiente en la cuenta", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        Cuenta cuenta = new Cuenta(cuentaO);
+        return cuenta;
+    }
+
+    /**
+     * Método que valida el estado de la cuenta destino
+     *
+     * @return Codigo de la cuenta validada
+     */
+    private int validarEstadoCuentaDestino() {
         int cuentaD = Integer.parseInt(txtCuentaDestino.getText());
         String estadoActual = cuentasDAO.consultar(cuentaD).getEstado();
-        if(estadoActual.equals("cancelada")){
-           JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia, la cuenta destino esta cancelada","ERROR", JOptionPane.ERROR_MESSAGE);
-           return 0;
+        if (estadoActual.equals("cancelada")) {
+            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia, la cuenta destino esta cancelada", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return 0;
         }
         return cuentaD;
     }
-    
-    
+
+    /**
+     * Método que realiza la transferencia
+     */
     private void realizar() {
-            
-        int cuentaO = Integer.parseInt(cbxCuentas.getSelectedItem().toString());
+
+        int cuentaO = validarMontoCuentaOrigen().getCodigo();
         float monto = Float.parseFloat(txtMonto.getText());
-        
+
         try {
-            int cuentaDestino = validarCuentaDestino();
-            
+            int cuentaDestino = validarEstadoCuentaDestino();
             transDAO.realizar(cuentaO, cuentaDestino, monto);
-             JOptionPane.showMessageDialog(this,"Se transfirio a la cuenta: "+ cuentaDestino + " Desde la cuenta: "+ cuentaO,"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Se transfirio a la cuenta: " + cuentaDestino + " Desde la cuenta: " + cuentaO, "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
         } catch (PersistenciaException ex) {
-             LOG.log(Level.SEVERE,ex.getMessage());
-            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia","ERROR", JOptionPane.ERROR_MESSAGE);
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

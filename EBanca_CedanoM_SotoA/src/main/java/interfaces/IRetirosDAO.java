@@ -16,8 +16,6 @@ import utils.ConfiguracionPaginado;
  */
 public interface IRetirosDAO {
     
-    Retiro consultar(Cliente codigo);
-    
     void retirar(Integer codigoCuenta, float cantidad, String contrasenia) throws PersistenciaException;
     
     Retiro retirar2(Integer codigoCuenta, float cantidad, String contrasenia) throws PersistenciaException;

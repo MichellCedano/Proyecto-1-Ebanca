@@ -20,42 +20,51 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgCrearCuenta extends javax.swing.JDialog {
+
     private Cliente cliente = null;
     private Cuenta cuenta = null;
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
-    
-    
+
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
+
     /**
-     * Creates new form DlgCrearCuenta
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     *
+     * @param parent
+     * @param modal
+     * @param clientesDAO
+     * @param cuentasDAO
+     * @param cliente
      */
     public DlgCrearCuenta(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, Cliente cliente) {
         super(parent, modal);
-        this.clientesDAO= clientesDAO;
+        this.clientesDAO = clientesDAO;
         this.cuentasDAO = cuentasDAO;
         this.cliente = cliente;
         initComponents();
-        
-        this.lblClienteNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
-        
-    }
-    
 
+        this.lblClienteNombre.setText(cliente.getNombres() + " " + cliente.getApPaterno() + " " + cliente.getApMaterno());
+
+    }
+
+    /**
+     * Método que guarda la cuenta según los datos registrados
+     */
     private void guardar() {
         Cuenta cuenta = new Cuenta();
-        try{
+        try {
             cuenta.setCodigoCliente(cliente.getCodigo());
             cuenta.setSaldo(Float.parseFloat(this.txtSaldo.getText()));
             cuentasDAO.insertar(cuenta);
-            JOptionPane.showMessageDialog(this,"Se agrego la cuenta: "+ cuenta.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
-        }catch(PersistenciaException ex){
-            LOG.log(Level.SEVERE,ex.getMessage());
-            JOptionPane.showMessageDialog(this,"No fue posible agregar la cuenta ","ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Se agrego la cuenta: " + cuenta.getCodigo(), "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible agregar la cuenta ", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -32,10 +32,20 @@ public class CuentasDAO implements ICuentasDAO{
     private static final Logger LOG = Logger.getLogger(CuentasDAO.class.getName());
     private final IConexionBD generadorConexiones;
 
+    /**
+     * Constructor que inicializa la conexión a la base de datos
+     * @param generadorConexiones 
+     */
     public CuentasDAO(IConexionBD generadorConexiones) {
         this.generadorConexiones = generadorConexiones;
     }
     
+    /**
+     * Método que inserta una cuenta
+     * @param cuenta Cuenta a insertar
+     * @return Cuenta insertada
+     * @throws PersistenciaException 
+     */
     @Override
     public Cuenta insertar(Cuenta cuenta) throws PersistenciaException {
         String sql = "insert into cuentas("
@@ -64,6 +74,12 @@ public class CuentasDAO implements ICuentasDAO{
         } 
     }
 
+    /**
+     * Método que consulta a una cuenta
+     *
+     * @param codigoCuenta Código de la cuenta a consultar
+     * @return Cuenta consultada
+     */
     @Override
     public Cuenta consultar(Integer codigoCuenta) {
         String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente "
@@ -91,6 +107,13 @@ public class CuentasDAO implements ICuentasDAO{
         }
     }
 
+    /**
+     * Método que consulta la lista de cuentas de un cliente en específico
+     *
+     * @param codigoCliente Cliente del que se quieren buscar las cuentas
+     * @return Lista de cuentas
+     * @throws PersistenciaException
+     */
     @Override
     public List<Cuenta> consultarLista(int codigoCliente) throws PersistenciaException {
         String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente "
@@ -115,6 +138,12 @@ public class CuentasDAO implements ICuentasDAO{
         }
     }
 
+    /**
+     * Método que actualiza el estado de una cuenta
+     * @param cuenta Cuenta a actualizar
+     * @return Cuenta actualizada
+     * @throws PersistenciaException 
+     */
     @Override
     public Cuenta actualizarEstado(Cuenta cuenta) throws PersistenciaException {
         String sql = "update cuentas set estado='cancelada' where codigo=? ";
@@ -131,6 +160,11 @@ public class CuentasDAO implements ICuentasDAO{
         }
     }
     
+    /**
+     * Método que com
+     * @param codigoCuenta
+     * @return 
+     */
     @Override
     public boolean compruebaCuenta(int codigoCuenta){
         String sql = "select codigo, estado, fechaApertura, saldo, codigoCliente "

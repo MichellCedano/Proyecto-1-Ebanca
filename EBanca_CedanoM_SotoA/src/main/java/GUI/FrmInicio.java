@@ -11,7 +11,6 @@ import excepciones.PersistenciaException;
 import interfaces.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import validador.Validadores;
 
@@ -20,35 +19,39 @@ import validador.Validadores;
  * @author koine
  */
 public class FrmInicio extends javax.swing.JFrame {
+
     private Cliente cliente = null;
     private Cuenta cuenta = null;
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(FrmInicio.class.getName());
-    
+
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
     private final IDireccionesDAO direccionDAO;
     private final IRetirosDAO retiroDAO;
-    
+
     /**
-     * Creates new form FrmInicio
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     *
      * @param clientesDAO
      * @param cliente
      * @param cuentasDAO
+     * @param transDAO
+     * @param direccionDAO
+     * @param retiroDAO
      */
     public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO, IRetirosDAO retiroDAO) {
-        this.clientesDAO= clientesDAO;
-        this.cliente= cliente;
-        this.cuentasDAO= cuentasDAO;
-        this.transDAO= transDAO;
+        this.clientesDAO = clientesDAO;
+        this.cliente = cliente;
+        this.cuentasDAO = cuentasDAO;
+        this.transDAO = transDAO;
         this.direccionDAO = direccionDAO;
         this.retiroDAO = retiroDAO;
         initComponents();
-        
-        this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
-        
-        
+
+        this.lblNombre.setText(cliente.getNombres() + " " + cliente.getApPaterno() + " " + cliente.getApMaterno());
+
     }
 
     /**
@@ -112,6 +115,10 @@ public class FrmInicio extends javax.swing.JFrame {
         });
         jPanel3.add(btnConsultar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 260, 75));
 
+        jLabel1.setFont(new java.awt.Font("Microsoft YaHei UI", 3, 60)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(14, 47, 132));
+        jLabel1.setText("E-banca");
+
         jButton1.setBackground(new java.awt.Color(72, 77, 197));
         jButton1.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -130,20 +137,22 @@ public class FrmInicio extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(49, 49, 49)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(148, 148, 148)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(118, 118, 118))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)

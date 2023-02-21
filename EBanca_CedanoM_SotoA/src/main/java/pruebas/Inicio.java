@@ -25,7 +25,7 @@ public class Inicio {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        IConexionBD generadorConexiones = new ConexionBD("jdbc:mysql://localhost/e_banca","root","AlexaSoto1");
+        IConexionBD generadorConexiones = new ConexionBD("jdbc:mysql://localhost/e_banca","root","8181");
         try{
             Connection conexion = generadorConexiones.crearConexion();
 

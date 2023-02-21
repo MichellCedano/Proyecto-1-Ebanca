@@ -31,7 +31,14 @@ public class DlgInicioSesion extends javax.swing.JDialog {
     private final IRetirosDAO retiroDAO;
     
     /**
-     * Creates new form VentanaInicioSesion
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     * @param parent
+     * @param modal
+     * @param clientesDAO
+     * @param cuentasDAO
+     * @param transDAO
+     * @param direccionDAO
+     * @param retiroDAO 
      */
     public DlgInicioSesion(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO, IRetirosDAO retiroDAO) {
         super(parent, modal);
@@ -60,7 +67,7 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         lblId = new javax.swing.JLabel();
         lblPin = new javax.swing.JLabel();
         txtIdCliente = new javax.swing.JTextField();
-        txtPin = new javax.swing.JTextField();
+        txtPin2 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -117,13 +124,13 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         });
         jPanel2.add(txtIdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, 250, 60));
 
-        txtPin.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
-        txtPin.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtPin2.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        txtPin2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPinKeyTyped(evt);
+                txtPin2KeyTyped(evt);
             }
         });
-        jPanel2.add(txtPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 280, 250, 60));
+        jPanel2.add(txtPin2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 120, 60));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 520));
 
@@ -151,22 +158,11 @@ public class DlgInicioSesion extends javax.swing.JDialog {
        
     }//GEN-LAST:event_txtIdClienteKeyTyped
 
-    private void txtPinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPinKeyTyped
-        int key = evt.getKeyChar();
-        boolean numeros = key >= 48 && key <= 57;
-        if (!numeros) {
-            evt.consume();
-        }
-        if (txtPin.getText().trim().length() == 4) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtPinKeyTyped
-
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         Cliente clienteConsulta = clientesDAO.consultar(Integer.parseInt(this.txtIdCliente.getText()));
         if(!(Integer.parseInt(this.txtIdCliente.getText()) == clienteConsulta.getCodigo())){
             JOptionPane.showMessageDialog(this,"No fue posible Iniciar sesion: id no encontrado","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(!(Integer.parseInt(this.txtPin.getText()) == clienteConsulta.getNip())){
+        }else if(!(Integer.parseInt(this.txtPin2.getText()) == clienteConsulta.getNip())){
             JOptionPane.showMessageDialog(this,"No fue posible Iniciar sesion: pin incorrecto","ERROR", JOptionPane.ERROR_MESSAGE);
         }else{
             new FrmInicio(clientesDAO, clienteConsulta, cuentasDAO, transDAO, direccionDAO, retiroDAO).setVisible(true);
@@ -177,6 +173,18 @@ public class DlgInicioSesion extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtPin2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPin2KeyTyped
+        // TODO add your handling code here:
+        int key = evt.getKeyChar();
+        boolean numeros = key >= 48 && key <= 57;
+        if (!numeros) {
+            evt.consume();
+        }
+        if (txtPin2.getText().trim().length() == 4) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPin2KeyTyped
 
 
 
@@ -189,6 +197,6 @@ public class DlgInicioSesion extends javax.swing.JDialog {
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblPin;
     private javax.swing.JTextField txtIdCliente;
-    private javax.swing.JTextField txtPin;
+    private javax.swing.JPasswordField txtPin2;
     // End of variables declaration//GEN-END:variables
 }

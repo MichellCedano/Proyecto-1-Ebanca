@@ -20,33 +20,39 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgActualizarDatos extends javax.swing.JDialog {
+
     private Cliente cliente = null;
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
-    
+
     private final IClientesDAO clientesDAO;
     private final IDireccionesDAO direccionDAO;
+
     /**
      * Creates new form DlgActualizarDatos
      */
     public DlgActualizarDatos(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente, IDireccionesDAO direccionDAO) {
         super(parent, modal);
-        this.clientesDAO= clientesDAO;
+        this.clientesDAO = clientesDAO;
         this.cliente = cliente;
         this.direccionDAO = direccionDAO;
         initComponents();
-        
     }
 
-    private Cliente validadorCliente(){
+    /**
+     * Método que valida los datos del cliente
+     *
+     * @return Cliente con los datos correctos
+     */
+    private Cliente validadorCliente() {
         Cliente cliente = null;
-        
-        if(!val.validaCadena(30,this.txtApellidoP.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido paterno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(!val.validaCadena(30,this.txtApellidoM.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido materno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);    
-        }else{
-            
+
+        if (!val.validaCadena(30, this.txtApellidoP.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El apellido paterno no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (!val.validaCadena(30, this.txtApellidoM.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El apellido materno no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+
             String nombres = this.txtNombre.getText();
             String apPaterno = this.txtApellidoP.getText();
             String apMaterno = this.txtApellidoM.getText();
@@ -55,40 +61,51 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         }
         return cliente;
     }
-    
-    private Direccion validadorDireccion(){
+
+    /**
+     * Método que valida los datos de una dirección
+     *
+     * @return Dirección con los datos correctos
+     */
+    private Direccion validadorDireccion() {
         Direccion direccion = null;
-        if(val.cadenaVacia(this.txtCalle.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La calle no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(val.cadenaVacia(this.txtColonia.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La colonia no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(val.cadenaVacia(this.txtNumCasa.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El numero de casa no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else{
+        if (val.cadenaVacia(this.txtCalle.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: La calle no es valida", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (val.cadenaVacia(this.txtColonia.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: La colonia no es valida", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (val.cadenaVacia(this.txtNumCasa.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El numero de casa no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
             String numCasa = this.txtNumCasa.getText();
             String calle = this.txtCalle.getText();
             String colonia = this.txtColonia.getText();
-            direccion = new Direccion(calle,colonia,numCasa);
-            
+            direccion = new Direccion(calle, colonia, numCasa);
+
             return direccion;
         }
         return direccion;
     }
-    
-    private void guardarDatosPersonales(){
-        
-        try{
+
+    /**
+     * Método que guarda los datos personales del cliente
+     */
+    private void guardarDatosPersonales() {
+
+        try {
             Cliente cliente = validadorCliente();
             this.clientesDAO.actualizarDatosPersonales(cliente.getCodigo(), cliente.getNombres(),
                     cliente.getApPaterno(), cliente.getApMaterno());
-            JOptionPane.showMessageDialog(this,"Se actualizó al cliente: "+cliente.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
-        }catch(PersistenciaException ex){
-            LOG.log(Level.SEVERE,ex.getMessage());
-            JOptionPane.showMessageDialog(this,"No fue posible actualizar al cliente: ","ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Se actualizó al cliente: " + cliente.getCodigo(), "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible actualizar al cliente: ", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
 
+    /**
+     * Método que guarda los datos de la dirección
+     */
     private void guardarDireccion() {
 
         try {
@@ -290,13 +307,11 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         boolean minusculas = key >= 97 && key <= 122;
         boolean espacio = key == 32;
 
-        if(txtNombre.getText().length() >= 31)
-        {
+        if (txtNombre.getText().length() >= 31) {
             evt.consume();
         }
 
-        if (!(minusculas || mayusculas || espacio))
-        {
+        if (!(minusculas || mayusculas || espacio)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
@@ -308,13 +323,11 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         boolean minusculas = key >= 97 && key <= 122;
         boolean espacio = key == 32;
 
-        if(txtApellidoP.getText().length() >= 31)
-        {
+        if (txtApellidoP.getText().length() >= 31) {
             evt.consume();
         }
 
-        if (!(minusculas || mayusculas || espacio))
-        {
+        if (!(minusculas || mayusculas || espacio)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtApellidoPKeyTyped
@@ -326,20 +339,17 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         boolean minusculas = key >= 97 && key <= 122;
         boolean espacio = key == 32;
 
-        if(txtApellidoM.getText().length() >= 31)
-        {
+        if (txtApellidoM.getText().length() >= 31) {
             evt.consume();
         }
 
-        if (!(minusculas || mayusculas || espacio))
-        {
+        if (!(minusculas || mayusculas || espacio)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtApellidoMKeyTyped
 
     private void txtCalleKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCalleKeyTyped
-        if(this.txtCalle.getText().length() >= 50)
-        {
+        if (this.txtCalle.getText().length() >= 50) {
             evt.consume();
         }
     }//GEN-LAST:event_txtCalleKeyTyped

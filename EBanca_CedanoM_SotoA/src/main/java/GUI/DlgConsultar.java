@@ -40,9 +40,19 @@ public class DlgConsultar extends javax.swing.JDialog {
     private int tamañoLista;
     private List<Cuenta> listaCuentas;
     private ConfiguracionPaginado paginado;
+    private ConfiguracionPaginado paginadoRetiro;
 
     /**
-     * Creates new form DlgConsultar
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     *
+     * @param parent
+     * @param modal
+     * @param clientesDAO
+     * @param cliente
+     * @param cuentasDAO
+     * @param transDAO
+     * @param retiroDAO
+     * @throws PersistenciaException
      */
     public DlgConsultar(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IRetirosDAO retiroDAO) throws PersistenciaException {
         super(parent, modal);
@@ -55,7 +65,8 @@ public class DlgConsultar extends javax.swing.JDialog {
         this.tamañoLista = 0;
         initComponents();
         this.paginado = new ConfiguracionPaginado(0, 3);
-    
+        this.paginadoRetiro = new ConfiguracionPaginado(0, 3);
+
         try {
             tamañoLista = cuentasDAO.consultarLista(cliente.getCodigo()).size();
             listaCuentas = cuentasDAO.consultarLista(cliente.getCodigo());
@@ -69,6 +80,9 @@ public class DlgConsultar extends javax.swing.JDialog {
         this.lblCliente.setText(cliente.getNombres() + " " + cliente.getApPaterno() + " " + cliente.getApMaterno());
     }
 
+    /**
+     * Método que llena la tabla de transferencias
+     */
     private void llenarTablaTransferencias() {
         try {
             Integer codigoCuenta = Integer.parseInt(this.cbxCuentas.getSelectedItem().toString());
@@ -87,11 +101,14 @@ public class DlgConsultar extends javax.swing.JDialog {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
     }
-    
+
+    /**
+     * Método que llena la tabla de retiros
+     */
     private void llenarTablaRetiros() {
         try {
             Integer codigoCuenta = Integer.parseInt(this.cbxCuentas.getSelectedItem().toString());
-            List<Retiro> listaRetiros = this.retiroDAO.consultarLista(paginado, codigoCuenta);
+            List<Retiro> listaRetiros = this.retiroDAO.consultarLista(paginadoRetiro, codigoCuenta);
             DefaultTableModel modeloTabla = (DefaultTableModel) this.tblRetiros.getModel();
             modeloTabla.setRowCount(0);
             for (Retiro retiro : listaRetiros) {
@@ -106,16 +123,38 @@ public class DlgConsultar extends javax.swing.JDialog {
         }
     }
 
-     private void avanzarPagina() {
+    /**
+     * Método que avanza de página de transferencias
+     */
+    private void avanzarPaginaTransferencias() {
         this.paginado.avanzarPagina();
         this.llenarTablaTransferencias();
     }
-    
-     private void retrocederPagina() {
+
+    /**
+     * Método que retrocede de página de transferencias
+     */
+    private void retrocederPaginaTransferencias() {
         this.paginado.retrocederPagina();
         this.llenarTablaTransferencias();
     }
 
+    /**
+     * Método que avanza de página de retiros
+     */
+    private void avanzarPaginaRetiros() {
+        this.paginadoRetiro.avanzarPagina();
+        this.llenarTablaRetiros();
+    }
+
+    /**
+     * Método que retrocede de página de retiros
+     */
+    private void retrocederPaginaRetiros() {
+        this.paginadoRetiro.retrocederPagina();
+        this.llenarTablaRetiros();
+    }
+    
 /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -133,10 +172,9 @@ public class DlgConsultar extends javax.swing.JDialog {
         cbxCuentas = new javax.swing.JComboBox<>();
         lblSaldo = new javax.swing.JLabel();
         lblCliente1 = new javax.swing.JLabel();
-        lblCantSaldo = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnTransferencias = new javax.swing.JButton();
-        txtEstado = new javax.swing.JTextField();
+        txtSaldo = new javax.swing.JTextField();
         lblCuenta = new javax.swing.JLabel();
         btnRetiros = new javax.swing.JButton();
         cbxElementosPagina = new javax.swing.JComboBox<>();
@@ -146,6 +184,10 @@ public class DlgConsultar extends javax.swing.JDialog {
         tblTransferencias = new javax.swing.JTable();
         pnlRetiros = new javax.swing.JScrollPane();
         tblRetiros = new javax.swing.JTable();
+        txtEstado = new javax.swing.JTextField();
+        btnAvanzarRetiros = new javax.swing.JButton();
+        btnRetrocederRetiros = new javax.swing.JButton();
+        cbxElementosPaginaRetiros = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar cuenta");
@@ -198,7 +240,6 @@ public class DlgConsultar extends javax.swing.JDialog {
         lblCliente1.setForeground(new java.awt.Color(14, 47, 132));
         lblCliente1.setText("Cliente:");
         jPanel2.add(lblCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 110, -1, -1));
-        jPanel2.add(lblCantSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 240, 83, 33));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
         btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -209,7 +250,7 @@ public class DlgConsultar extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 0, 40, 30));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 0, 60, 60));
 
         btnTransferencias.setBackground(new java.awt.Color(72, 77, 197));
         btnTransferencias.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -222,9 +263,9 @@ public class DlgConsultar extends javax.swing.JDialog {
         });
         jPanel2.add(btnTransferencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, 180, 50));
 
-        txtEstado.setEditable(false);
-        txtEstado.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
-        jPanel2.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 120, 40));
+        txtSaldo.setEditable(false);
+        txtSaldo.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        jPanel2.add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 120, 40));
 
         lblCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 24)); // NOI18N
         lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
@@ -242,13 +283,14 @@ public class DlgConsultar extends javax.swing.JDialog {
         });
         jPanel2.add(btnRetiros, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 350, 160, 50));
 
+        cbxElementosPagina.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
         cbxElementosPagina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3", "5", "10" }));
         cbxElementosPagina.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbxElementosPaginaItemStateChanged(evt);
             }
         });
-        jPanel2.add(cbxElementosPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 410, -1, -1));
+        jPanel2.add(cbxElementosPagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 410, 60, 30));
 
         btnRetroceder.setBackground(new java.awt.Color(72, 77, 197));
         btnRetroceder.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 15)); // NOI18N
@@ -259,7 +301,7 @@ public class DlgConsultar extends javax.swing.JDialog {
                 btnRetrocederActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRetroceder, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 410, 70, -1));
+        jPanel2.add(btnRetroceder, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 410, 70, -1));
 
         btnAvanzar.setBackground(new java.awt.Color(72, 77, 197));
         btnAvanzar.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 15)); // NOI18N
@@ -270,7 +312,7 @@ public class DlgConsultar extends javax.swing.JDialog {
                 btnAvanzarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAvanzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 410, 70, -1));
+        jPanel2.add(btnAvanzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 410, 70, -1));
 
         tblTransferencias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -336,6 +378,41 @@ public class DlgConsultar extends javax.swing.JDialog {
 
         jPanel2.add(pnlRetiros, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 220, 260));
 
+        txtEstado.setEditable(false);
+        txtEstado.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 18)); // NOI18N
+        jPanel2.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 120, 40));
+
+        btnAvanzarRetiros.setBackground(new java.awt.Color(72, 77, 197));
+        btnAvanzarRetiros.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 15)); // NOI18N
+        btnAvanzarRetiros.setForeground(new java.awt.Color(255, 255, 255));
+        btnAvanzarRetiros.setText("-->");
+        btnAvanzarRetiros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAvanzarRetirosActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAvanzarRetiros, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 410, 70, -1));
+
+        btnRetrocederRetiros.setBackground(new java.awt.Color(72, 77, 197));
+        btnRetrocederRetiros.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 15)); // NOI18N
+        btnRetrocederRetiros.setForeground(new java.awt.Color(255, 255, 255));
+        btnRetrocederRetiros.setText("<--");
+        btnRetrocederRetiros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetrocederRetirosActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnRetrocederRetiros, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 410, 70, -1));
+
+        cbxElementosPaginaRetiros.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        cbxElementosPaginaRetiros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3", "5", "10" }));
+        cbxElementosPaginaRetiros.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxElementosPaginaRetirosItemStateChanged(evt);
+            }
+        });
+        jPanel2.add(cbxElementosPaginaRetiros, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 410, 60, 30));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 900, 460));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 980, 530));
@@ -361,7 +438,9 @@ public class DlgConsultar extends javax.swing.JDialog {
         if(evt.getStateChange() == ItemEvent.SELECTED){
             int codigoCuenta = Integer.parseInt(evt.getItem().toString());
             String estadoCuenta = cuentasDAO.consultar(codigoCuenta).getEstado();
+            float saldo = cuentasDAO.consultar(codigoCuenta).getSaldo();
             this.txtEstado.setText(estadoCuenta);
+            this.txtSaldo.setText(String.valueOf(saldo));
         }
     }//GEN-LAST:event_cbxCuentasItemStateChanged
 
@@ -383,24 +462,42 @@ public class DlgConsultar extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxElementosPaginaItemStateChanged
 
     private void btnRetrocederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederActionPerformed
-        retrocederPagina();
+        retrocederPaginaTransferencias();
     }//GEN-LAST:event_btnRetrocederActionPerformed
 
     private void btnAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarActionPerformed
-        avanzarPagina();
+        avanzarPaginaTransferencias();
     }//GEN-LAST:event_btnAvanzarActionPerformed
+
+    private void btnAvanzarRetirosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarRetirosActionPerformed
+        avanzarPaginaRetiros();
+    }//GEN-LAST:event_btnAvanzarRetirosActionPerformed
+
+    private void btnRetrocederRetirosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederRetirosActionPerformed
+        retrocederPaginaRetiros();
+    }//GEN-LAST:event_btnRetrocederRetirosActionPerformed
+
+    private void cbxElementosPaginaRetirosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxElementosPaginaRetirosItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            int elementosMostrados = Integer.parseInt(evt.getItem().toString());
+            this.paginadoRetiro.setElementosPagina(elementosMostrados);
+            this.llenarTablaRetiros();
+        }
+    }//GEN-LAST:event_cbxElementosPaginaRetirosItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAvanzar;
+    private javax.swing.JButton btnAvanzarRetiros;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRetiros;
     private javax.swing.JButton btnRetroceder;
+    private javax.swing.JButton btnRetrocederRetiros;
     private javax.swing.JButton btnTransferencias;
     private javax.swing.JComboBox<String> cbxCuentas;
     private javax.swing.JComboBox<String> cbxElementosPagina;
+    private javax.swing.JComboBox<String> cbxElementosPaginaRetiros;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lblCantSaldo;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCliente1;
     private javax.swing.JLabel lblConsultar;
@@ -412,6 +509,7 @@ public class DlgConsultar extends javax.swing.JDialog {
     private javax.swing.JTable tblRetiros;
     private javax.swing.JTable tblTransferencias;
     private javax.swing.JTextField txtEstado;
+    private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
 }
 

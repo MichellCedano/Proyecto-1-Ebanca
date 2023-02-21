@@ -23,25 +23,38 @@ public class DireccionesDAO implements IDireccionesDAO {
     private static final Logger LOG = Logger.getLogger(ClientesDAO.class.getName());
     private final IConexionBD generadorConexiones;
 
+    /**
+     * Constructor que genera la conexión con la base de datos
+     *
+     * @param generadorConexiones
+     */
     public DireccionesDAO(IConexionBD generadorConexiones) {
         this.generadorConexiones = generadorConexiones;
     }
-    
+
+    /**
+     * Método que actualiza la dirección
+     *
+     * @param codigoDireccion Dirección a actualizar
+     * @param nvaCalle Nueva calle
+     * @param nvoNumero Nuevo número
+     * @param nvaColonia Nuev colonia
+     * @throws PersistenciaException
+     */
     @Override
     public void actualizarDireccion(Integer codigoDireccion, String nvaCalle,
             String nvoNumero, String nvaColonia) throws PersistenciaException {
-        
+
         String sqlT = "{call actualizarDireccion(?,?,?,?)}";
 
-        try (Connection conexion = this.generadorConexiones.crearConexion(); 
-                CallableStatement cst = conexion.prepareCall(sqlT);) {
+        try (Connection conexion = this.generadorConexiones.crearConexion(); CallableStatement cst = conexion.prepareCall(sqlT);) {
 
             cst.setInt(1, codigoDireccion);
             cst.setString(2, nvaCalle);
             cst.setString(3, nvoNumero);
             cst.setString(4, nvaColonia);
             cst.executeUpdate();
-            
+
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
             throw new PersistenciaException("No fue posible actualizar la dirección");

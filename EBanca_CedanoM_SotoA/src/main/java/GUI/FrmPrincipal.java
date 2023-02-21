@@ -13,17 +13,23 @@ import java.util.logging.Logger;
  * @author koine
  */
 public class FrmPrincipal extends javax.swing.JFrame {
+
     private static final Logger LOG = Logger.getLogger(FrmPrincipal.class.getName());
-    
+
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
     private final IDireccionesDAO direccionDAO;
     private final IRetirosDAO retiroDAO;
-    
+
     /**
-     * Creates new form FrmPrincipal
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     *
      * @param clientesDAO
+     * @param cuentasDAO
+     * @param transDAO
+     * @param direccionDAO
+     * @param retiroDAO
      */
     public FrmPrincipal(IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO, IRetirosDAO retiroDAO) {
         this.clientesDAO = clientesDAO;
@@ -32,7 +38,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.direccionDAO = direccionDAO;
         this.retiroDAO = retiroDAO;
         initComponents();
-        
+
     }
 
     /**
@@ -59,21 +65,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(149, 194, 255));
 
+        lblLogo.setFont(new java.awt.Font("Microsoft YaHei", 2, 100)); // NOI18N
+        lblLogo.setForeground(new java.awt.Color(255, 255, 255));
+        lblLogo.setText("E-banca");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(27, Short.MAX_VALUE)
-                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addContainerGap(34, Short.MAX_VALUE)
+                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 35, -1, 250));
@@ -139,7 +149,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
-     new DlgRetiro(this, true, clientesDAO, retiroDAO).setVisible(true);
+     new DlgRetiro(this, true, clientesDAO, retiroDAO, cuentasDAO).setVisible(true);
     }//GEN-LAST:event_btnRetiroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

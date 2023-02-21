@@ -6,6 +6,7 @@
 package GUI;
 
 import dominio.Cliente;
+import dominio.Cuenta;
 import dominio.Retiro;
 import excepciones.PersistenciaException;
 import interfaces.*;
@@ -20,27 +21,58 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgRetiro extends javax.swing.JDialog {
+
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
-    
+
     private final IClientesDAO clientesDAO;
     private final IRetirosDAO retirosDAO;
-    
+    private final ICuentasDAO cuentasDAO;
+
     /**
-     * Creates new form DlgRetiro
+     * Constructor que inicializa los atributos al valor de sus parámetros
+     *
      * @param parent
+     * @param modal
+     * @param clientesDAO
+     * @param retirosDAO
+     * @param cuentasDAO
      */
-    public DlgRetiro(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, IRetirosDAO retirosDAO) {
+    public DlgRetiro(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, IRetirosDAO retirosDAO, ICuentasDAO cuentasDAO) {
         super(parent, modal);
-        this.clientesDAO= clientesDAO;
+        this.clientesDAO = clientesDAO;
         this.retirosDAO = retirosDAO;
+        this.cuentasDAO = cuentasDAO;
         initComponents();
+
     }
 
+    /**
+     * Método que valida el monto de la cuenta origen
+     *
+     * @return Cuenta con el monto válido
+     */
+    private Cuenta validarMontoCuentaOrigen() {
+        int cuentaO = Integer.parseInt(txtCuenta.getText());
+        float monto = Float.parseFloat(txtMonto.getText());
+
+        if (monto > cuentasDAO.consultar(cuentaO).getSaldo()) {
+            JOptionPane.showMessageDialog(this, "No fue posible realizar el retiro, dinero insuficiente en la cuenta", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        Cuenta cuenta = new Cuenta(cuentaO);
+        return cuenta;
+    }
+
+    /**
+     * Método que realiza el retiro
+     *
+     * @return Retiro realizado
+     */
     public Retiro retiro() {
 
         try {
-            Integer cuenta = Integer.parseInt(txtCuenta.getText());
+            Integer cuenta = validarMontoCuentaOrigen().getCodigo();
             float monto = Float.parseFloat(txtMonto.getText());
             String contrasenia = Utilerias.generarContrasenia(8);
             Retiro retiro = retirosDAO.retirar2(cuenta, monto, contrasenia);
@@ -52,7 +84,7 @@ public class DlgRetiro extends javax.swing.JDialog {
         }
         return null;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -23,69 +23,92 @@ import validador.Validadores;
  * @author koine
  */
 public class DlgRegistro extends javax.swing.JDialog {
+
     private Validadores val = new Validadores();
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
-    
+
     private final IClientesDAO clientesDAO;
+
     /**
-     * Creates new form DlgRegistro
+     * Constructor que incializa los atributos al valor de sus parámetros
+     *
      * @param parent
+     * @param modal
+     * @param clientesDAO
      */
     public DlgRegistro(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO) {
         super(parent, modal);
         this.clientesDAO = clientesDAO;
         initComponents();
     }
-    
- private Cliente validadorCliente(){
+
+    /**
+     * Método que valida que los datos ingresados sean correctos
+     *
+     * @return Cliente validado
+     */
+    private Cliente validadorCliente() {
         Cliente cliente = null;
-        if(!val.validaCadena(30,this.txtNombre.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El nombre no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(!val.validaCadena(30,this.txtApellidoP.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido paterno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(!val.validaCadena(30,this.txtApellidoM.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido materno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);    
-        }else if(!val.validaEntero(this.txtPin.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El pin no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else{
+        if (!val.validaCadena(30, this.txtNombre.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El nombre no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (!val.validaCadena(30, this.txtApellidoP.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El apellido paterno no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (!val.validaCadena(30, this.txtApellidoM.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El apellido materno no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (!val.validaEntero(this.txtPin2.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El pin no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
             String nombres = this.txtNombre.getText();
-            Integer codigoDireccion = 2; 
-            Integer nip = Integer.parseInt(this.txtPin.getText());
+            Integer codigoDireccion = 2;
+            Integer nip = Integer.parseInt(this.txtPin2.getText());
             String apPaterno = this.txtApellidoP.getText();
             String apMaterno = this.txtApellidoM.getText();
-            cliente = new Cliente(nombres, apPaterno,  apMaterno,  codigoDireccion, nip);
-            
+            cliente = new Cliente(nombres, apPaterno, apMaterno, codigoDireccion, nip);
+
             return cliente;
         }
         return cliente;
     }
-    
-    private Direccion validadorDireccion(){
+
+    /**
+     * Método que valida que los datos de una dirección sean correctos
+     *
+     * @return Direccion validada
+     */
+    private Direccion validadorDireccion() {
         Direccion direccion = null;
-        if(val.cadenaVacia(this.txtCalle.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La calle no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(val.cadenaVacia(this.txtColonia.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La colonia no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else if(val.cadenaVacia(this.txtNumCasa.getText())){
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El numero de casa no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else{
+        if (val.cadenaVacia(this.txtCalle.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: La calle no es valida", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (val.cadenaVacia(this.txtColonia.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: La colonia no es valida", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (val.cadenaVacia(this.txtNumCasa.getText())) {
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: El numero de casa no es valido", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
             String numCasa = this.txtNumCasa.getText();
             String calle = this.txtCalle.getText();
             String colonia = this.txtColonia.getText();
-            direccion = new Direccion(calle,colonia,numCasa);
-            
+            direccion = new Direccion(calle, colonia, numCasa);
+
             return direccion;
         }
         return direccion;
     }
-    
-    private String validarFechaNacimiento(){
+
+    /**
+     * Método que valida la fecha de nacimiento
+     *
+     * @return String con la fecha de nacimiento valida
+     */
+    private String validarFechaNacimiento() {
         int dia = Integer.parseInt(this.cmbDia.getSelectedItem().toString());
         int mes = Integer.parseInt(this.cmbMes.getSelectedItem().toString());
         int anio = Integer.parseInt(this.cmbAnio.getSelectedItem().toString());
-        return anio+"-"+mes+"-"+dia;
+        return anio + "-" + mes + "-" + dia;
     }
-    
+
+    /**
+     * Método que guarda los datos del cliente
+     */
     private void guardar() {
 
         try {
@@ -134,9 +157,9 @@ public class DlgRegistro extends javax.swing.JDialog {
         txtCalle = new javax.swing.JTextField();
         txtColonia = new javax.swing.JTextField();
         txtNumCasa = new javax.swing.JTextField();
-        txtPin = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        txtPin2 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(640, 772));
@@ -295,14 +318,6 @@ public class DlgRegistro extends javax.swing.JDialog {
         });
         jPanel2.add(txtNumCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 490, 230, 40));
 
-        txtPin.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
-        txtPin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPinKeyTyped(evt);
-            }
-        });
-        jPanel2.add(txtPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 580, 170, 40));
-
         btnGuardar.setBackground(new java.awt.Color(72, 77, 197));
         btnGuardar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
@@ -325,6 +340,14 @@ public class DlgRegistro extends javax.swing.JDialog {
         });
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 650, 170, 50));
 
+        txtPin2.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 18)); // NOI18N
+        txtPin2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPin2KeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtPin2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 580, -1, -1));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 580, 720));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 780));
@@ -333,17 +356,6 @@ public class DlgRegistro extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
-    private void txtPinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPinKeyTyped
-        int key = evt.getKeyChar();
-        boolean numeros = key >= 48 && key <= 57;
-        if (!numeros) {
-            evt.consume();
-        }
-        if (txtPin.getText().trim().length() == 4) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtPinKeyTyped
-
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         int key = evt.getKeyChar();
 
@@ -432,6 +444,18 @@ public class DlgRegistro extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbAnioActionPerformed
 
+    private void txtPin2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPin2KeyTyped
+        // TODO add your handling code here:
+         int key = evt.getKeyChar();
+        boolean numeros = key >= 48 && key <= 57;
+        if (!numeros) {
+            evt.consume();
+        }
+        if (txtPin2.getText().trim().length() == 4) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPin2KeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
@@ -458,6 +482,6 @@ public class DlgRegistro extends javax.swing.JDialog {
     private javax.swing.JTextField txtColonia;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtNumCasa;
-    private javax.swing.JTextField txtPin;
+    private javax.swing.JPasswordField txtPin2;
     // End of variables declaration//GEN-END:variables
 }
