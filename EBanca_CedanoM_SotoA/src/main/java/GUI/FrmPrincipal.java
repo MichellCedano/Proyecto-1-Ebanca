@@ -135,7 +135,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-     new DlgInicioSesion(this, true, clientesDAO,cuentasDAO,transDAO,direccionDAO).setVisible(true);
+     new DlgInicioSesion(this, true, clientesDAO,cuentasDAO,transDAO,direccionDAO, retiroDAO).setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed

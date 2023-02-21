@@ -37,7 +37,7 @@ public class DlgRegistro extends javax.swing.JDialog {
         initComponents();
     }
     
-    private Cliente validadorCliente(){
+ private Cliente validadorCliente(){
         Cliente cliente = null;
         if(!val.validaCadena(30,this.txtNombre.getText())){
             JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El nombre no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
@@ -53,12 +53,7 @@ public class DlgRegistro extends javax.swing.JDialog {
             Integer nip = Integer.parseInt(this.txtPin.getText());
             String apPaterno = this.txtApellidoP.getText();
             String apMaterno = this.txtApellidoM.getText();
-            int dia = Integer.parseInt(this.cmbDia.getSelectedItem().toString());
-            int mes = Integer.parseInt(this.cmbMes.getSelectedItem().toString());
-            int anio = Integer.parseInt(this.cmbAnio.getSelectedItem().toString());
-            Date fechaNacimiento = new Date(anio,mes,dia);
-            
-            cliente = new Cliente( nombres, apPaterno,  apMaterno,  codigoDireccion,  fechaNacimiento, nip);
+            cliente = new Cliente(nombres, apPaterno,  apMaterno,  codigoDireccion, nip);
             
             return cliente;
         }
@@ -84,25 +79,29 @@ public class DlgRegistro extends javax.swing.JDialog {
         return direccion;
     }
     
-    private void guardar(){
-  
-        Direccion direccion = validadorDireccion();
-        
-        Cliente cliente = validadorCliente();
-               
-        //Enviar a dao para guardar
-        
-        try{
-            this.clientesDAO.insertar(cliente, direccion);
-            JOptionPane.showMessageDialog(this,"Se agrego al cliente: "+cliente.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
-        }catch(PersistenciaException ex){
-            LOG.log(Level.SEVERE,ex.getMessage());
-            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: ","ERROR", JOptionPane.ERROR_MESSAGE);
+    private String validarFechaNacimiento(){
+        int dia = Integer.parseInt(this.cmbDia.getSelectedItem().toString());
+        int mes = Integer.parseInt(this.cmbMes.getSelectedItem().toString());
+        int anio = Integer.parseInt(this.cmbAnio.getSelectedItem().toString());
+        return anio+"-"+mes+"-"+dia;
+    }
+    
+    private void guardar() {
+
+        try {
+            Direccion direccion = validadorDireccion();
+            Cliente cliente = validadorCliente();
+            String fecha = validarFechaNacimiento();
+            this.clientesDAO.insertar(cliente, direccion, fecha);
+            JOptionPane.showMessageDialog(this, "Se agrego al cliente: " + cliente.getCodigo(), "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible agregar al cliente: ", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        
-    } 
-    
-    
+
+    }
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -242,15 +241,20 @@ public class DlgRegistro extends javax.swing.JDialog {
 
         cmbDia.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 12)); // NOI18N
         cmbDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
-        jPanel2.add(cmbDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, -1, -1));
+        jPanel2.add(cmbDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 60, -1));
 
         cmbMes.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 12)); // NOI18N
         cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
-        jPanel2.add(cmbMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, -1, -1));
+        jPanel2.add(cmbMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 60, -1));
 
         cmbAnio.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 12)); // NOI18N
-        cmbAnio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1999", "2000", "2001", "2002", "2003", "2004", " " }));
-        jPanel2.add(cmbAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 260, -1, -1));
+        cmbAnio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004" }));
+        cmbAnio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAnioActionPerformed(evt);
+            }
+        });
+        jPanel2.add(cmbAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, 90, -1));
 
         jPanel4.setBackground(new java.awt.Color(56, 115, 205));
 
@@ -423,6 +427,10 @@ public class DlgRegistro extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_txtColoniaKeyTyped
+
+    private void cmbAnioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAnioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbAnioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

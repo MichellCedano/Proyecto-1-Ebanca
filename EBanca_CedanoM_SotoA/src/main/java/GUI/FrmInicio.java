@@ -29,6 +29,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
     private final IDireccionesDAO direccionDAO;
+    private final IRetirosDAO retiroDAO;
     
     /**
      * Creates new form FrmInicio
@@ -36,15 +37,17 @@ public class FrmInicio extends javax.swing.JFrame {
      * @param cliente
      * @param cuentasDAO
      */
-    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO) {
+    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO, IRetirosDAO retiroDAO) {
         this.clientesDAO= clientesDAO;
         this.cliente= cliente;
         this.cuentasDAO= cuentasDAO;
         this.transDAO= transDAO;
         this.direccionDAO = direccionDAO;
+        this.retiroDAO = retiroDAO;
         initComponents();
         
         this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
+        
         
     }
 
@@ -265,7 +268,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         try {
-            new DlgConsultar(this, true, clientesDAO, cliente, cuentasDAO, transDAO).setVisible(true);
+            new DlgConsultar(this, true, clientesDAO, cliente, cuentasDAO, transDAO, retiroDAO).setVisible(true);
         } catch (PersistenciaException ex) {
             Logger.getLogger(FrmInicio.class.getName()).log(Level.SEVERE, null, ex);
         }

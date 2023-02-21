@@ -16,8 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -114,7 +117,7 @@ public class RetirosDAO implements IRetirosDAO{
                 retiro.setFolio(llavePrimaria);
                 retiro.setCantidad(cantidad);
                 retiro.setContrasena(contrasenia);
-                retiro.setCodigoCuentaDestino(codigoCuenta);
+                retiro.setCodigoCuenta(codigoCuenta);
                 return retiro;
             }
         } catch (SQLException ex) {
@@ -122,5 +125,38 @@ public class RetirosDAO implements IRetirosDAO{
             throw new PersistenciaException("No fue posible realizar el retiro");
         }
         return null;
+    }
+
+    @Override
+    public List<Retiro> consultarLista(ConfiguracionPaginado paginado, Integer codigoCuenta) throws PersistenciaException {
+        String sql = "select folio, cantidad, contrasenia, codigoCuenta, fechaRetiro, estado "
+                + "from retiros "
+                + "where codigoCuenta = ? LIMIT ? OFFSET ?";
+        List<Retiro> listaRetiros = new LinkedList<>();
+        
+        try (
+                Connection conexion = this.generadorConexiones.crearConexion();
+                PreparedStatement comando = conexion.prepareStatement(sql);) {
+            comando.setInt(1, codigoCuenta);
+            comando.setInt(2, paginado.getElementosPagina());
+            comando.setInt(3, paginado.getNumPagina());
+            ResultSet registro = comando.executeQuery();
+            while (registro.next()) {
+                Integer folio = registro.getInt("folio");
+                float cant = registro.getFloat("cantidad");
+                String contrasena = registro.getString("contrasenia");
+                Integer codigoCuenta2 = registro.getInt("codigoCuenta");
+                Date fechaRetiro = registro.getDate("fechaRetiro");
+                String estado = registro.getString("estado");
+                
+                Retiro retiro = new Retiro(folio, cant, contrasena, codigoCuenta,
+                fechaRetiro, estado);
+                listaRetiros.add(retiro);
+            }
+            return listaRetiros;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No se pudo consultar la lista de retiros");
+        }
     }
 }

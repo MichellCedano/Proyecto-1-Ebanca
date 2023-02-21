@@ -9,6 +9,7 @@ import dominio.Cliente;
 import interfaces.IClientesDAO;
 import interfaces.ICuentasDAO;
 import interfaces.IDireccionesDAO;
+import interfaces.IRetirosDAO;
 import interfaces.ITransferenciasDAO;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -27,16 +28,18 @@ public class DlgInicioSesion extends javax.swing.JDialog {
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
     private final IDireccionesDAO direccionDAO;
+    private final IRetirosDAO retiroDAO;
     
     /**
      * Creates new form VentanaInicioSesion
      */
-    public DlgInicioSesion(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO) {
+    public DlgInicioSesion(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO, IRetirosDAO retiroDAO) {
         super(parent, modal);
         this.clientesDAO= clientesDAO;
         this.cuentasDAO= cuentasDAO;
         this.transDAO= transDAO;
         this.direccionDAO = direccionDAO;
+        this.retiroDAO = retiroDAO;
         initComponents();
     }
 
@@ -72,7 +75,7 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         lblCliente.setFont(new java.awt.Font("Microsoft YaHei", 1, 48)); // NOI18N
         lblCliente.setForeground(new java.awt.Color(14, 47, 132));
         lblCliente.setText("Cliente");
-        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, -1, -1));
+        jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, -1, -1));
 
         btnAceptar.setBackground(new java.awt.Color(72, 77, 197));
         btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -166,7 +169,7 @@ public class DlgInicioSesion extends javax.swing.JDialog {
         }else if(!(Integer.parseInt(this.txtPin.getText()) == clienteConsulta.getNip())){
             JOptionPane.showMessageDialog(this,"No fue posible Iniciar sesion: pin incorrecto","ERROR", JOptionPane.ERROR_MESSAGE);
         }else{
-            new FrmInicio(clientesDAO, clienteConsulta, cuentasDAO, transDAO, direccionDAO).setVisible(true);
+            new FrmInicio(clientesDAO, clienteConsulta, cuentasDAO, transDAO, direccionDAO, retiroDAO).setVisible(true);
             dispose();
         }
     }//GEN-LAST:event_btnAceptarActionPerformed

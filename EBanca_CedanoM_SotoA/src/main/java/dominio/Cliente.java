@@ -26,6 +26,14 @@ public class Cliente {
     public Cliente() {
     }
 
+    public Cliente(String nombres, String apPaterno, String apMaterno, Integer codigoDireccion, int nip) {
+        this.nombres = nombres;
+        this.apPaterno = apPaterno;
+        this.apMaterno = apMaterno;
+        this.codigoDireccion = codigoDireccion;
+        this.nip = nip;
+    }
+
     public Cliente(Integer codigo, String nombres, String apPaterno, String apMaterno, Integer codigoDireccion, Date fechaNacimiento, int edad, int nip) {
         this.codigo = codigo;
         this.nombres = nombres;

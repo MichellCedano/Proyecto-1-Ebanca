@@ -15,7 +15,7 @@ public class Retiro {
     private Integer folio;
     private float cantidad;
     private String contrasena;
-    private int codigoCuentaDestino;
+    private Integer codigoCuenta;
     private Date fechaRetiro;
     private String estado;
 
@@ -26,11 +26,11 @@ public class Retiro {
         this.folio = folio;
     }
 
-    public Retiro(Integer folio, float cantidad, String contrasena, int codigoCuentaDestino, Date fechaRetiro, String estado) {
+    public Retiro(Integer folio, float cantidad, String contrasena, Integer codigoCuenta, Date fechaRetiro, String estado) {
         this.folio = folio;
         this.cantidad = cantidad;
         this.contrasena = contrasena;
-        this.codigoCuentaDestino = codigoCuentaDestino;
+        this.codigoCuenta = codigoCuenta;
         this.fechaRetiro = fechaRetiro;
         this.estado = estado;
     }
@@ -59,12 +59,12 @@ public class Retiro {
         this.contrasena = contrasena;
     }
 
-    public int getCodigoCuentaDestino() {
-        return codigoCuentaDestino;
+    public Integer getCodigoCuenta() {
+        return codigoCuenta;
     }
 
-    public void setCodigoCuentaDestino(int codigoCuentaDestino) {
-        this.codigoCuentaDestino = codigoCuentaDestino;
+    public void setCodigoCuenta(int codigoCuenta) {
+        this.codigoCuenta = codigoCuenta;
     }
 
     public Date getFechaRetiro() {

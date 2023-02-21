@@ -68,7 +68,7 @@ public class ClientesDAO implements IClientesDAO {
     }
 
     @Override
-    public Cliente insertar(Cliente cliente, Direccion direccion) throws PersistenciaException {
+    public Cliente insertar(Cliente cliente, Direccion direccion, String fecha) throws PersistenciaException {
         String sqlD = "insert into direcciones("
                 + "calle, numero, colonia)"
                 + "values (?,?,?)";
@@ -94,12 +94,11 @@ public class ClientesDAO implements IClientesDAO {
                 Integer llavePrimaria = llavesGeneradas1.getInt(1);
                 cliente.setCodigoDireccion(llavePrimaria);
             }        
-            String fechaN = "2002-2-2";
             comando.setString(1, cliente.getNombres());
             comando.setString(2, cliente.getApPaterno());
             comando.setString(3, cliente.getApMaterno());
             comando.setInt(4, cliente.getCodigoDireccion());
-            comando.setDate(5, java.sql.Date.valueOf(fechaN));
+            comando.setDate(5, java.sql.Date.valueOf(fecha));
             comando.setInt(6, cliente.getNip());
             comando.executeUpdate();
 

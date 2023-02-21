@@ -19,7 +19,7 @@ public interface IClientesDAO {
     
     Cliente consultar(Integer codigoCliente);
     
-    Cliente insertar(Cliente cliente, Direccion direccion) throws PersistenciaException; 
+    Cliente insertar(Cliente cliente, Direccion direccion, String fecha) throws PersistenciaException; 
     
     List <Cliente> consultarLista(ConfiguracionPaginado paginado) throws PersistenciaException;
     

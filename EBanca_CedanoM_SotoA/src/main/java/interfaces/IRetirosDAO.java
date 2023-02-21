@@ -7,6 +7,8 @@ package interfaces;
 import dominio.Cliente;
 import dominio.Retiro;
 import excepciones.PersistenciaException;
+import java.util.List;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -19,5 +21,7 @@ public interface IRetirosDAO {
     void retirar(Integer codigoCuenta, float cantidad, String contrasenia) throws PersistenciaException;
     
     Retiro retirar2(Integer codigoCuenta, float cantidad, String contrasenia) throws PersistenciaException;
+    
+    List<Retiro> consultarLista(ConfiguracionPaginado paginado, Integer codigoCuenta) throws PersistenciaException;
     
 }
