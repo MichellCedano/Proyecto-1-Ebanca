@@ -8,6 +8,8 @@ import dominio.Cliente;
 import dominio.Cuenta;
 import dominio.Transferencia;
 import excepciones.PersistenciaException;
+import java.util.List;
+import utils.ConfiguracionPaginado;
 
 /**
  *
@@ -18,4 +20,6 @@ public interface ITransferenciasDAO {
     Transferencia consultar(Cliente codigo);
     
     Transferencia realizar(Integer cliente, Integer cuenta, float cantidad) throws PersistenciaException;
+    
+    List<Transferencia> consultarLista(ConfiguracionPaginado paginado, Integer codigoCuenta) throws PersistenciaException;
 }

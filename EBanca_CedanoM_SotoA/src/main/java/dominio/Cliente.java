@@ -49,9 +49,20 @@ public class Cliente {
     public Cliente(Integer codigo) {
         this.codigo = codigo;
     }
+
+    public Cliente(String nombres, String apPaterno, String apMaterno) {
+        this.nombres = nombres;
+        this.apPaterno = apPaterno;
+        this.apMaterno = apMaterno;
+    }
     
-    
-    
+    public Cliente(Integer codigo, String nombres, String apPaterno, String apMaterno) {
+        this.codigo = codigo;
+        this.nombres = nombres;
+        this.apPaterno = apPaterno;
+        this.apMaterno = apMaterno;
+    }
+
     public Integer getCodigo() {
         return codigo;
     }

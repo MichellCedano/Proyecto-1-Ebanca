@@ -8,9 +8,7 @@ package GUI;
 import dominio.Cliente;
 import dominio.Cuenta;
 import excepciones.PersistenciaException;
-import interfaces.IClientesDAO;
-import interfaces.ICuentasDAO;
-import interfaces.ITransferenciasDAO;
+import interfaces.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -25,22 +23,25 @@ public class FrmInicio extends javax.swing.JFrame {
     private Cliente cliente = null;
     private Cuenta cuenta = null;
     private Validadores val = new Validadores();
-    private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
+    private static final Logger LOG = Logger.getLogger(FrmInicio.class.getName());
     
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
+    private final IDireccionesDAO direccionDAO;
+    
     /**
      * Creates new form FrmInicio
      * @param clientesDAO
      * @param cliente
      * @param cuentasDAO
      */
-    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO) {
+    public FrmInicio(IClientesDAO clientesDAO, Cliente cliente, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO) {
         this.clientesDAO= clientesDAO;
         this.cliente= cliente;
         this.cuentasDAO= cuentasDAO;
         this.transDAO= transDAO;
+        this.direccionDAO = direccionDAO;
         initComponents();
         
         this.lblNombre.setText(cliente.getNombres()+" "+cliente.getApPaterno()+" "+cliente.getApMaterno());
@@ -291,7 +292,7 @@ public class FrmInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_menuICrearCuentaActionPerformed
 
     private void menuIActualizarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIActualizarDatosActionPerformed
-        new DlgActualizarDatos(this, true, clientesDAO, cliente).setVisible(true);
+        new DlgActualizarDatos(this, true, clientesDAO, cliente, direccionDAO).setVisible(true);
     }//GEN-LAST:event_menuIActualizarDatosActionPerformed
 
     private void menuItemTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemTransferenciaActionPerformed

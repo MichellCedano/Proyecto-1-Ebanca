@@ -6,6 +6,7 @@ package interfaces;
 
 import dominio.Cliente;
 import dominio.Retiro;
+import excepciones.PersistenciaException;
 
 /**
  *
@@ -15,5 +16,8 @@ public interface IRetirosDAO {
     
     Retiro consultar(Cliente codigo);
     
-    Retiro retirar();
+    void retirar(Integer codigoCuenta, float cantidad, String contrasenia) throws PersistenciaException;
+    
+    Retiro retirar2(Integer codigoCuenta, float cantidad, String contrasenia) throws PersistenciaException;
+    
 }

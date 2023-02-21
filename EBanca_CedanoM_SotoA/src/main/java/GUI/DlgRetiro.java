@@ -6,8 +6,13 @@
 package GUI;
 
 import dominio.Cliente;
-import interfaces.IClientesDAO;
+import dominio.Retiro;
+import excepciones.PersistenciaException;
+import interfaces.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import utils.Utilerias;
 import validador.Validadores;
 
 /**
@@ -19,19 +24,33 @@ public class DlgRetiro extends javax.swing.JDialog {
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
+    private final IRetirosDAO retirosDAO;
     
     /**
      * Creates new form DlgRetiro
      * @param parent
      */
-    public DlgRetiro(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO) {
+    public DlgRetiro(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, IRetirosDAO retirosDAO) {
         super(parent, modal);
         this.clientesDAO= clientesDAO;
+        this.retirosDAO = retirosDAO;
         initComponents();
     }
 
-    public void retiro() {
-        
+    public Retiro retiro() {
+
+        try {
+            Integer cuenta = Integer.parseInt(txtCuenta.getText());
+            float monto = Float.parseFloat(txtMonto.getText());
+            String contrasenia = Utilerias.generarContrasenia(8);
+            Retiro retiro = retirosDAO.retirar2(cuenta, monto, contrasenia);
+            JOptionPane.showMessageDialog(this, "Se creó el folio de la cuenta: " + cuenta, "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+            return retiro;
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible realizar la transferencia", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
     }
     
     /**
@@ -47,11 +66,15 @@ public class DlgRetiro extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         lblConsultar = new javax.swing.JLabel();
         lblCliente1 = new javax.swing.JLabel();
-        lblSaldo = new javax.swing.JLabel();
-        txtContrasena = new javax.swing.JTextField();
+        lblCuenta = new javax.swing.JLabel();
+        txtCuenta = new javax.swing.JTextField();
         txtFolio = new javax.swing.JTextField();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        lblSaldo1 = new javax.swing.JLabel();
+        txtContrasena = new javax.swing.JTextField();
+        lblMonto = new javax.swing.JLabel();
+        txtMonto = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Retiro");
@@ -73,14 +96,15 @@ public class DlgRetiro extends javax.swing.JDialog {
         lblCliente1.setText("Folio:");
         jPanel2.add(lblCliente1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
-        lblSaldo.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
-        lblSaldo.setForeground(new java.awt.Color(14, 47, 132));
-        lblSaldo.setText("Contraseña:");
-        jPanel2.add(lblSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
+        lblCuenta.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        lblCuenta.setForeground(new java.awt.Color(14, 47, 132));
+        lblCuenta.setText("Cuenta:");
+        jPanel2.add(lblCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
 
-        txtContrasena.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
-        jPanel2.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 160, 40));
+        txtCuenta.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(txtCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, 80, 40));
 
+        txtFolio.setEditable(false);
         txtFolio.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         jPanel2.add(txtFolio, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, 170, 40));
 
@@ -93,7 +117,7 @@ public class DlgRetiro extends javax.swing.JDialog {
                 btnAceptarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 150, 60));
+        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 150, 60));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
         btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
@@ -104,19 +128,37 @@ public class DlgRetiro extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 220, 160, 60));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 160, 60));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 440, 310));
+        lblSaldo1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        lblSaldo1.setForeground(new java.awt.Color(14, 47, 132));
+        lblSaldo1.setText("Contraseña:");
+        jPanel2.add(lblSaldo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 370));
+        txtContrasena.setEditable(false);
+        txtContrasena.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 160, 40));
+
+        lblMonto.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
+        lblMonto.setForeground(new java.awt.Color(14, 47, 132));
+        lblMonto.setText("Monto:");
+        jPanel2.add(lblMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
+
+        txtMonto.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
+        jPanel2.add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, 80, 40));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 440, 440));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 510));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        retiro();
-        dispose();
+        Retiro retiro = retiro();
+        this.txtFolio.setText(retiro.getFolio().toString());
+        this.txtContrasena.setText(retiro.getContrasena());
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -131,8 +173,12 @@ public class DlgRetiro extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblCliente1;
     private javax.swing.JLabel lblConsultar;
-    private javax.swing.JLabel lblSaldo;
+    private javax.swing.JLabel lblCuenta;
+    private javax.swing.JLabel lblMonto;
+    private javax.swing.JLabel lblSaldo1;
     private javax.swing.JTextField txtContrasena;
+    private javax.swing.JTextField txtCuenta;
     private javax.swing.JTextField txtFolio;
+    private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,7 @@ public class Retiro {
     
     private Integer folio;
     private float cantidad;
-    private int contrasena;
+    private String contrasena;
     private int codigoCuentaDestino;
     private Date fechaRetiro;
     private String estado;
@@ -26,7 +26,7 @@ public class Retiro {
         this.folio = folio;
     }
 
-    public Retiro(Integer folio, float cantidad, int contrasena, int codigoCuentaDestino, Date fechaRetiro, String estado) {
+    public Retiro(Integer folio, float cantidad, String contrasena, int codigoCuentaDestino, Date fechaRetiro, String estado) {
         this.folio = folio;
         this.cantidad = cantidad;
         this.contrasena = contrasena;
@@ -51,11 +51,11 @@ public class Retiro {
         this.cantidad = cantidad;
     }
 
-    public int getContrasena() {
+    public String getContrasena() {
         return contrasena;
     }
 
-    public void setContrasena(int contrasena) {
+    public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
 

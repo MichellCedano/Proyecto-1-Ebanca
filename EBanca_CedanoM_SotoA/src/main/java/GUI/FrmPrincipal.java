@@ -5,9 +5,7 @@
  */
 package GUI;
 
-import interfaces.IClientesDAO;
-import interfaces.ICuentasDAO;
-import interfaces.ITransferenciasDAO;
+import interfaces.*;
 import java.util.logging.Logger;
 
 /**
@@ -20,15 +18,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private final IClientesDAO clientesDAO;
     private final ICuentasDAO cuentasDAO;
     private final ITransferenciasDAO transDAO;
+    private final IDireccionesDAO direccionDAO;
+    private final IRetirosDAO retiroDAO;
+    
     /**
      * Creates new form FrmPrincipal
      * @param clientesDAO
      */
-    public FrmPrincipal(IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO) {
+    public FrmPrincipal(IClientesDAO clientesDAO, ICuentasDAO cuentasDAO, ITransferenciasDAO transDAO, IDireccionesDAO direccionDAO, IRetirosDAO retiroDAO) {
         this.clientesDAO = clientesDAO;
         this.cuentasDAO = cuentasDAO;
         this.transDAO = transDAO;
+        this.direccionDAO = direccionDAO;
+        this.retiroDAO = retiroDAO;
         initComponents();
+        
     }
 
     /**
@@ -131,11 +135,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-     new DlgInicioSesion(this, true, clientesDAO,cuentasDAO,transDAO).setVisible(true);
+     new DlgInicioSesion(this, true, clientesDAO,cuentasDAO,transDAO,direccionDAO).setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
-     new DlgRetiro(this, true, clientesDAO).setVisible(true);
+     new DlgRetiro(this, true, clientesDAO, retiroDAO).setVisible(true);
     }//GEN-LAST:event_btnRetiroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -6,8 +6,13 @@
 package GUI;
 
 import dominio.Cliente;
-import interfaces.IClientesDAO;
+import dominio.Direccion;
+import excepciones.PersistenciaException;
+import interfaces.*;
+import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import validador.Validadores;
 
 /**
@@ -20,14 +25,81 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
     private static final Logger LOG = Logger.getLogger(DlgRegistro.class.getName());
     
     private final IClientesDAO clientesDAO;
+    private final IDireccionesDAO direccionDAO;
     /**
      * Creates new form DlgActualizarDatos
      */
-    public DlgActualizarDatos(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente) {
+    public DlgActualizarDatos(java.awt.Frame parent, boolean modal, IClientesDAO clientesDAO, Cliente cliente, IDireccionesDAO direccionDAO) {
         super(parent, modal);
         this.clientesDAO= clientesDAO;
         this.cliente = cliente;
+        this.direccionDAO = direccionDAO;
         initComponents();
+        
+    }
+
+    private Cliente validadorCliente(){
+        Cliente cliente = null;
+        
+        if(!val.validaCadena(30,this.txtApellidoP.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido paterno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(!val.validaCadena(30,this.txtApellidoM.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El apellido materno no es valido","ERROR", JOptionPane.ERROR_MESSAGE);    
+        }else{
+            
+            String nombres = this.txtNombre.getText();
+            String apPaterno = this.txtApellidoP.getText();
+            String apMaterno = this.txtApellidoM.getText();
+            cliente = new Cliente(this.cliente.getCodigo(), nombres, apPaterno, apMaterno);
+            return cliente;
+        }
+        return cliente;
+    }
+    
+    private Direccion validadorDireccion(){
+        Direccion direccion = null;
+        if(val.cadenaVacia(this.txtCalle.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La calle no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(val.cadenaVacia(this.txtColonia.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: La colonia no es valida","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else if(val.cadenaVacia(this.txtNumCasa.getText())){
+            JOptionPane.showMessageDialog(this,"No fue posible agregar al cliente: El numero de casa no es valido","ERROR", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String numCasa = this.txtNumCasa.getText();
+            String calle = this.txtCalle.getText();
+            String colonia = this.txtColonia.getText();
+            direccion = new Direccion(calle,colonia,numCasa);
+            
+            return direccion;
+        }
+        return direccion;
+    }
+    
+    private void guardarDatosPersonales(){
+        
+        try{
+            Cliente cliente = validadorCliente();
+            this.clientesDAO.actualizarDatosPersonales(cliente.getCodigo(), cliente.getNombres(),
+                    cliente.getApPaterno(), cliente.getApMaterno());
+            JOptionPane.showMessageDialog(this,"Se actualizó al cliente: "+cliente.getCodigo(),"INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        }catch(PersistenciaException ex){
+            LOG.log(Level.SEVERE,ex.getMessage());
+            JOptionPane.showMessageDialog(this,"No fue posible actualizar al cliente: ","ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+
+    private void guardarDireccion() {
+
+        try {
+            Direccion direccion = validadorDireccion();
+            this.direccionDAO.actualizarDireccion(cliente.getCodigoDireccion(),
+                    direccion.getCalle(), direccion.getNumeroCasa(), direccion.getColonia());
+            JOptionPane.showMessageDialog(this, "Se actualizó la dirección: " + cliente.getCodigoDireccion(), "INFORMACION", JOptionPane.INFORMATION_MESSAGE);
+        } catch (PersistenciaException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "No fue posible actualizar la dirección ", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -56,8 +128,9 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         txtCalle = new javax.swing.JTextField();
         txtColonia = new javax.swing.JTextField();
         txtNumCasa = new javax.swing.JTextField();
-        btnAceptar = new javax.swing.JButton();
+        btnAceptarDireccion = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        btnAceptarDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Actualizar datos");
@@ -74,7 +147,7 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         lblActualizar.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblActualizar.setForeground(new java.awt.Color(14, 47, 132));
         lblActualizar.setText("Dirección");
-        jPanel2.add(lblActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, -1, -1));
+        jPanel2.add(lblActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, -1, -1));
 
         lblApellidoPaterno.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 14)); // NOI18N
         lblApellidoPaterno.setForeground(new java.awt.Color(14, 47, 132));
@@ -128,7 +201,7 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
             .addGap(0, 13, Short.MAX_VALUE)
         );
 
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 470, -1));
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, 470, -1));
 
         lblActualizar1.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 24)); // NOI18N
         lblActualizar1.setForeground(new java.awt.Color(14, 47, 132));
@@ -138,17 +211,17 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         lblCasa.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 14)); // NOI18N
         lblCasa.setForeground(new java.awt.Color(14, 47, 132));
         lblCasa.setText("Calle");
-        jPanel2.add(lblCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, -1, -1));
+        jPanel2.add(lblCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, -1));
 
         lblColonia.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 14)); // NOI18N
         lblColonia.setForeground(new java.awt.Color(14, 47, 132));
         lblColonia.setText("Colonia");
-        jPanel2.add(lblColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, -1, 20));
+        jPanel2.add(lblColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 450, -1, 20));
 
         lblNumeroCasa.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 14)); // NOI18N
         lblNumeroCasa.setForeground(new java.awt.Color(14, 47, 132));
         lblNumeroCasa.setText("Número casa:");
-        jPanel2.add(lblNumeroCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 470, -1, -1));
+        jPanel2.add(lblNumeroCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 510, -1, -1));
 
         txtCalle.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
         txtCalle.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -156,10 +229,10 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
                 txtCalleKeyTyped(evt);
             }
         });
-        jPanel2.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, 230, 40));
+        jPanel2.add(txtCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, 230, 40));
 
         txtColonia.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
-        jPanel2.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 400, 230, 40));
+        jPanel2.add(txtColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 440, 230, 40));
 
         txtNumCasa.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
         txtNumCasa.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -167,33 +240,44 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
                 txtNumCasaKeyTyped(evt);
             }
         });
-        jPanel2.add(txtNumCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, 230, 40));
+        jPanel2.add(txtNumCasa, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 500, 230, 40));
 
-        btnAceptar.setBackground(new java.awt.Color(72, 77, 197));
-        btnAceptar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
-        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAceptar.setText("Aceptar");
-        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+        btnAceptarDireccion.setBackground(new java.awt.Color(72, 77, 197));
+        btnAceptarDireccion.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnAceptarDireccion.setForeground(new java.awt.Color(255, 255, 255));
+        btnAceptarDireccion.setText("Aceptar");
+        btnAceptarDireccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAceptarActionPerformed(evt);
+                btnAceptarDireccionActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 520, 160, 50));
+        jPanel2.add(btnAceptarDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 560, 160, 50));
 
         btnCancelar.setBackground(new java.awt.Color(72, 77, 197));
-        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("Microsoft YaHei", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("X");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 520, 160, 50));
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, 50, 40));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 490, 600));
+        btnAceptarDatos.setBackground(new java.awt.Color(72, 77, 197));
+        btnAceptarDatos.setFont(new java.awt.Font("Microsoft YaHei", 1, 12)); // NOI18N
+        btnAceptarDatos.setForeground(new java.awt.Color(255, 255, 255));
+        btnAceptarDatos.setText("Aceptar");
+        btnAceptarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarDatosActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAceptarDatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 160, 50));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 660));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 490, 640));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 710));
 
         pack();
         setLocationRelativeTo(null);
@@ -266,20 +350,26 @@ public class DlgActualizarDatos extends javax.swing.JDialog {
         if (!numeros) {
             evt.consume();
         }
-        
     }//GEN-LAST:event_txtNumCasaKeyTyped
 
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+    private void btnAceptarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarDireccionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAceptarActionPerformed
+        this.guardarDireccion();
+    }//GEN-LAST:event_btnAceptarDireccionActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnAceptarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarDatosActionPerformed
+        // TODO add your handling code here:
+        this.guardarDatosPersonales();
+    }//GEN-LAST:event_btnAceptarDatosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnAceptarDatos;
+    private javax.swing.JButton btnAceptarDireccion;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

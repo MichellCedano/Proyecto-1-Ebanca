@@ -10,6 +10,7 @@ import dominio.Direccion;
 import excepciones.PersistenciaException;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,7 +119,7 @@ public class ClientesDAO implements IClientesDAO {
         
     }
 
-   
+    
     @Override
     public List<Cliente> consultarLista(ConfiguracionPaginado paginado) throws PersistenciaException {
         String sql = "select codigo, nombre, apellidoPaterno, apellidoMaterno, codigoDireccion "
@@ -150,5 +151,22 @@ public class ClientesDAO implements IClientesDAO {
         }
     }
 
+    @Override
+    public void actualizarDatosPersonales(Integer codigoCliente, String nvoNombre, String nvoApPaterno, String nvoApMaterno) throws PersistenciaException {
+        String sqlT = "{call actualizarDatosPersonales(?,?,?,?)}";
 
+        try (Connection conexion = this.generadorConexiones.crearConexion(); 
+                CallableStatement cst = conexion.prepareCall(sqlT);) {
+
+            cst.setInt(1, codigoCliente);
+            cst.setString(2, nvoNombre);
+            cst.setString(3, nvoApPaterno);
+            cst.setString(4, nvoApMaterno);
+            cst.executeUpdate();
+
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+            throw new PersistenciaException("No fue posible actualizar los datos personales");
+        }
+    }
 }

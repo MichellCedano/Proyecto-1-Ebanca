@@ -163,6 +163,7 @@ public class DlgTransferencia extends javax.swing.JDialog {
         lblCliente.setText("Cliente:");
         jPanel2.add(lblCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
+        txtNombre.setEditable(false);
         txtNombre.setFont(new java.awt.Font("Microsoft YaHei", 1, 14)); // NOI18N
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 262, 49));
 

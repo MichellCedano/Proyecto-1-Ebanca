@@ -7,14 +7,8 @@ package pruebas;
 
 import GUI.DlgRegistro;
 import GUI.FrmPrincipal;
-import implementaciones.ClientesDAO;
-import implementaciones.ConexionBD;
-import implementaciones.CuentasDAO;
-import implementaciones.TransferenciasDAO;
-import interfaces.IClientesDAO;
-import interfaces.IConexionBD;
-import interfaces.ICuentasDAO;
-import interfaces.ITransferenciasDAO;
+import implementaciones.*;
+import interfaces.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,18 +25,16 @@ public class Inicio {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        IConexionBD generadorConexiones = new ConexionBD("jdbc:mysql://localhost/e_banca","root","8181");
+        IConexionBD generadorConexiones = new ConexionBD("jdbc:mysql://localhost/e_banca","root","AlexaSoto1");
         try{
-  
-    
             Connection conexion = generadorConexiones.crearConexion();
-
-            Statement comando = conexion.createStatement();
 
             IClientesDAO clientesDAO = new ClientesDAO(generadorConexiones);
             ICuentasDAO cuentasDAO = new CuentasDAO(generadorConexiones);
             ITransferenciasDAO transDAO = new TransferenciasDAO(generadorConexiones);
-             new FrmPrincipal(clientesDAO,cuentasDAO, transDAO).setVisible(true);
+            IDireccionesDAO direccionDAO = new DireccionesDAO(generadorConexiones);
+            IRetirosDAO retirosDAO = new RetirosDAO(generadorConexiones);
+             new FrmPrincipal(clientesDAO,cuentasDAO, transDAO, direccionDAO, retirosDAO).setVisible(true);
             
             
         }catch(SQLException ex){

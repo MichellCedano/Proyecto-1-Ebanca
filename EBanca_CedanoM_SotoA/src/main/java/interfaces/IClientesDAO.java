@@ -22,4 +22,6 @@ public interface IClientesDAO {
     Cliente insertar(Cliente cliente, Direccion direccion) throws PersistenciaException; 
     
     List <Cliente> consultarLista(ConfiguracionPaginado paginado) throws PersistenciaException;
+    
+    void actualizarDatosPersonales(Integer codigoCliente, String nvoNombre, String nvoApPaterno, String nvoApMaterno) throws PersistenciaException;
 }
